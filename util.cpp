@@ -1,6 +1,8 @@
 #include "util.h"
 
-util::util() {}
+util::util() {
+
+}
 int util::postHttp(QJsonArray &json){
 
 

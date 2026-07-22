@@ -9,7 +9,7 @@ void hilo::run(){
         qDebug()<<"No hay conexión entre aplicaciones";
     }
     while(true){
-        sleep(900);
+        sleep(300);
         QJsonArray jsonArray;
         QJsonObject objCarga;
         QJsonObject objTipo;
@@ -65,6 +65,8 @@ void hilo::run(){
             if(respuesta != -1 && id != -1){
                 idBateria = respuesta;
                 variableUtil.guardarIdArchivo(idBateria);
+            }else if(respuesta == -1){
+                idBateria = -1;
             }
         }
     }
