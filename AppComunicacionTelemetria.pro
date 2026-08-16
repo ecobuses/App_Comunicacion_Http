@@ -1,6 +1,6 @@
 QT += core network
 
-CONFIG += c++17 cmdline
+CONFIG += c++17 console
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -21,3 +21,6 @@ HEADERS += \
     hilo.h \
     servidor.h \
     util.h
+
+DISTFILES += \
+    config.ini

@@ -11,6 +11,7 @@
 #include<QTimer>
 #include <QFile>
 #include <QTextStream>
+#include <QSettings>
 class util
 {
 public:
@@ -21,7 +22,7 @@ public:
     QString getPathId(){return this->pathId;}
 private:
     const  QString url="http://localhost:8080/magnitud";
-    const QString pathId = "./valorId.txt";
+    const  QString pathId = "/home/pi/aplicaciones/App_Comunicacion_Http/valorId.txt";
 };
 
 #endif // UTIL_H
