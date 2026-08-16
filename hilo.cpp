@@ -26,6 +26,7 @@ void hilo::run(){
             QDateTime horaLocal = horaUtc.toTimeZone(zonaMenosTres);
             // Formatear a: yyyy-MM-dd HH:mm:ss
             QString formato = horaLocal.toString("yyyy-MM-dd HH:mm:ss");
+            qDebug()<<"La hora que toma el sistema es: "<< formato;
             objCarga.insert("id",QJsonValue::Null);
             objCarga.insert("fecha",formato);
             objCarga.insert("valor",datos["carga"].toDouble());
