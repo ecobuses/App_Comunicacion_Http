@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 19.0.1, 2026-06-25T20:25:05. -->
+<!-- Written by QtCreator 19.0.1, 2026-08-17T22:16:19. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -166,7 +166,7 @@
      <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph dwarf,4096 -F 250</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:</value>
-     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/sebastian/Documentos/Trabajo/CTA/Proyectos/Ecobuses/Otras_aplicaciones/AppComunicacionTelemetria/AppComunicacionTelemetria.pro</value>
+     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/sebastian/Documentos/Trabajo/Electromovilidad/Proyectos/Ecobuses/Otras_aplicaciones/AppComunicacionTelemetria/AppComunicacionTelemetria.pro</value>
      <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
      <value type="QString" key="ProjectExplorer.RunConfiguration.UniqueId"></value>
      <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
@@ -204,7 +204,7 @@
     <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph dwarf,4096 -F 250</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/sebastian/Documentos/Trabajo/CTA/Proyectos/Ecobuses/Otras_aplicaciones/AppComunicacionTelemetria/AppComunicacionTelemetria.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/sebastian/Documentos/Trabajo/Electromovilidad/Proyectos/Ecobuses/Otras_aplicaciones/AppComunicacionTelemetria/AppComunicacionTelemetria.pro</value>
     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.UniqueId"></value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
