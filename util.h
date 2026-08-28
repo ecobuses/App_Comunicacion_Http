@@ -20,6 +20,7 @@ public:
     bool guardarIdArchivo(int id);
     int  leerIdArchivo();
     QString getPathId(){return this->pathId;}
+    bool determinarConexiónAInternet();
 private:
     const  QString url="http://localhost:8080/magnitud";
     const  QString pathId = "/home/pi/App_Comunicacion_Http/archivos_configuracion/valorId.txt";
