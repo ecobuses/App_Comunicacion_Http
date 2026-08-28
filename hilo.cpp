@@ -9,6 +9,7 @@ void hilo::run(){
         qDebug()<<"No hay conexión entre aplicaciones";
     }
     while(true){
+        qDebug()<<"El id es "<<idBateria;
         sleep(300);
         QJsonArray jsonArray;
         QJsonObject objCarga;
@@ -62,11 +63,13 @@ void hilo::run(){
             objTemperatura.insert("idBateria",idBateria);
             jsonArray.append(objTemperatura);
             int respuesta =variableUtil.postHttp(jsonArray);
-            if(respuesta != -1 && id != -1){
+            if(respuesta != -1){
                 idBateria = respuesta;
                 variableUtil.guardarIdArchivo(idBateria);
-            }else if(respuesta == -1){
+                qDebug()<<"El id sigue siendo"<<idBateria;
+            }else if(respuesta == 0){
                 idBateria = -1;
+                qDebug()<<"Estableciste el id en -1";
             }
         }
     }

@@ -43,7 +43,7 @@ int util::postHttp(QJsonArray &json){
 }
 bool util::guardarIdArchivo(int id){
     QFile file(this->getPathId());
-    if(file.open(QIODevice::WriteOnly  | QIODevice::Text)){
+    if(file.open(QIODevice::WriteOnly  | QIODevice::Text) && id>0){
         QTextStream in (&file);
         in<<id;
         return true;
