@@ -22,7 +22,7 @@ public:
     QString getPathId(){return this->pathId;}
 private:
     const  QString url="http://localhost:8080/magnitud";
-    const  QString pathId = "/home/pi/aplicaciones/App_Comunicacion_Http/valorId.txt";
+    const  QString pathId = "/home/pi/App_Comunicacion_Http/archivos_configuracion/valorId.txt";
 };
 
 #endif // UTIL_H
