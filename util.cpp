@@ -62,3 +62,6 @@ int util::leerIdArchivo(){
     }
     return -1;
 }
+bool util::determinarConexiónAInternet(){
+
+}
