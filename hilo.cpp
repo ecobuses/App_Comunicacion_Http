@@ -11,6 +11,7 @@ void hilo::run(){
     while(true){
         //Se duerme 5 segúndos si 300 es el argumento
         sleep(300);
+        bool hayInternet = variableUtil.determinarConexionAInternet();
         QJsonArray jsonArray;
         QJsonObject objCarga;
         QJsonObject objTipo;
@@ -19,7 +20,14 @@ void hilo::run(){
         qDebug()<<"Datos corriente: " << datos["corriente"];
         qDebug()<<"Datos voltaje: " << datos["voltaje"];
         qDebug()<<"Datos temperatura: " << datos["temperatura"];
-        if(!datos.isEmpty()){
+        //No quiero que me mande datos vacios.
+        //Además solo quiero que intente enviar información si tiene internet
+        if(datos["carga"] != QJsonValue::Null
+            &&datos["corriente"] != QJsonValue::Null
+            &&datos["voltaje"] != QJsonValue::Null
+            &&datos["temperatura"] != QJsonValue::Null
+            &&hayInternet
+        ){
             QDateTime horaUtc = QDateTime::currentDateTimeUtc();
             // 2. Crear la zona horaria UTC-3 (3 horas * 3600 segundos = 10800)
             QTimeZone zonaMenosTres(-10800);
@@ -70,6 +78,10 @@ void hilo::run(){
             }else if(respuesta == 0){
                 idBateria = -1;
             }
+        //En caso de que no halla internet tengo que guardar los datos
+        // en una planilla o algo.
+        }else if(!hayInternet){
+
         }
     }
 }
