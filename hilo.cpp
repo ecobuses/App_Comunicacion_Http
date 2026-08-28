@@ -9,6 +9,7 @@ void hilo::run(){
         qDebug()<<"No hay conexión entre aplicaciones";
     }
     while(true){
+        //Se duerme 5 segúndos si 300 es el argumento
         sleep(300);
         QJsonArray jsonArray;
         QJsonObject objCarga;
@@ -66,7 +67,7 @@ void hilo::run(){
             if(respuesta != -1 && id != -1){
                 idBateria = respuesta;
                 variableUtil.guardarIdArchivo(idBateria);
-            }else if(respuesta == -1){
+            }else if(respuesta == 0){
                 idBateria = -1;
             }
         }
