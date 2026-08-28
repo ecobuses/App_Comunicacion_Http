@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QSettings>
+#include <QNetworkInformation>
 class util
 {
 public:
@@ -29,7 +30,7 @@ public:
 
     // ---------------------------------------------------------------------------------------//
     QString getPathId(){return this->pathId;}
-    bool hayInternet();
+    bool determinarConexionAInternet();
 private:
     const  QString url="http://localhost:8080/magnitud";
     const  QString pathId = "/home/pi/aplicaciones/App_Comunicacion_Http/valorId.txt";
