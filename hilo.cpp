@@ -36,17 +36,12 @@ void hilo::run(){
             //Determino si tengo conexión a internet.
             if(hayInternet){
                 //Envío datos del Excel si hay
+                enviarDatosDelExcel(&variableUtil,&mp);
                 //Luego voy a enviar el dato leído actual.
                 jsonArray = variableUtil.armarQJsonArray(&datos);
-                respuesta =variableUtil.postHttp(jsonArray);
+                respuesta = variableUtil.postHttp(jsonArray);
                 //Se ingresaron correctamente los datos.
-                if(respuesta != -1 && id != -1){
-                    idBateria = respuesta;
-                    mp.guardarIdArchivo(idBateria);
-                    //No se encontro la batería a la que pertenecen esos datos
-                }else if(respuesta == 0){
-                    idBateria = -1;
-                }
+                validacionDeId(&respuesta,&idBateria);
             }
             //Surgio un error al enviar la petición HTTP, es decir no se enviaron los datos al servidor.
             //En este caso también tendría que guardar los datos, y luego intentar volver a enviarlos.
@@ -60,5 +55,24 @@ void hilo::run(){
         }else{
             qDebug()<<"Recibi dato nulos, comunicación Telemetria";
         }
+    }
+}
+void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp){
+    QJsonObject obj;
+    QJsonArray aEnviar;
+    obj = mp->leerDatoTelemetria();
+    while(!obj.empty()){
+        aEnviar = u->armarQJsonArray(&obj);
+        id = u->postHttp(aEnviar);
+    }
+
+}
+void hilo::validacionDeId(int* respuesta, int* idBateria){
+    if(*respuesta != -1 && id != -1){
+        *idBateria = *respuesta;
+        mp.guardarIdArchivo(*idBateria);
+        //No se encontro la batería a la que pertenecen esos datos
+    }else if(respuesta == 0){
+        *idBateria = -1;
     }
 }

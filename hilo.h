@@ -11,12 +11,14 @@ public:
     void setId(int id){this->id=id;}
     int getId(){return this->id;}
     //Los datos de telemetria que quedaron guardados en el excel se tienen que enviar.
-    bool enviarDatosDelExcel();
+    void enviarDatosDelExcel(util* u, Manipular_Archivos *mp);
 private:
+    //Variables
     int id;
     util variableUtil;
     Manipular_Archivos mp;
-
+    //Funciones
+    void validacionDeId(int* id,int * idBateria);
 protected:
     void run();
 };
