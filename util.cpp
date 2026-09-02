@@ -41,33 +41,12 @@ int util::postHttp(QJsonArray &json){
         return -1;
     }
 }
-bool util::guardarIdArchivo(int id){
-    QFile file(this->getPathId());
-    if(file.open(QIODevice::WriteOnly  | QIODevice::Text)){
-        QTextStream in (&file);
-        in<<id;
-        return true;
-    }
-    return false;
-}
-int util::leerIdArchivo(){
-    QFile file(this->getPathId());
-    int id;
-    if(file.open(QIODevice::ReadOnly  | QIODevice::Text)){
-        QTextStream in (&file);
-        in>>id;
-        if(id > 0){
-            return id;
-        }
-    }
-    return -1;
-}
 bool determinarConexionAInternet(){
     if(QNetworkInformation::loadDefaultBackend()){
         QNetworkInformation *info = QNetworkInformation::instance();
 
         if(info && info->reachability() == QNetworkInformation::Reachability::Online){
-            qDebug()<< "Archivo util/determinarConexionAInternet -Hay internet";
+            qDebug()<< "Archivo util/determinarConexionAInternet - Hay internet";
             return true;
         }else
         {

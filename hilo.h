@@ -3,7 +3,7 @@
 #include <QThread>
 #include <QTimeZone>
 #include "util.h"
-#include "servidor.h"
+#include "manipuar_archivos.h"
 class hilo:public QThread
 {
 public:
@@ -13,6 +13,8 @@ public:
 private:
     int id;
     util variableUtil;
+    Manipular_Archivos mp;
+
 protected:
     void run();
 };
