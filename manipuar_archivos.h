@@ -18,8 +18,8 @@ public:
     // ----------------------------------------//
 
     //--------------- archivo excel telemetrias fallidas ------------//
-    bool guardarDatoTelelmetria(QJsonArray obj);
-    QJsonArray leerDatoTelemetria();
+    bool guardarDatoTelelmetria(QJsonObject obj);
+    QJsonObject leerDatoTelemetria();
     //---------------------------------------------------------------//
 private:
     // Variable con la ruta del archvio donde se escribe el ID de la batería del ecobus en el sistema.

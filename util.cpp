@@ -41,6 +41,7 @@ int util::postHttp(QJsonArray &json){
         return -1;
     }
 }
+// Utiliza la librería QNetworkInformation que viene a partir de QT.6 para determinar si hay conexión.
 bool determinarConexionAInternet(){
     if(QNetworkInformation::loadDefaultBackend()){
         QNetworkInformation *info = QNetworkInformation::instance();
@@ -56,4 +57,60 @@ bool determinarConexionAInternet(){
     }
     qDebug()<< "Archivo util/determinarConexionAInternet - No se pudo determinar";
     return true;
+}
+//armarJSonArray - Crea objetos QJsonObject y los mete en un QJsonArray para enviar al servidor
+QJsonArray util::armarQJsonArray(QJsonObject datos, int idBateria){
+    //Guarda el tipo del dato
+    QJsonObject objTipo;
+    QJsonObject objCarga;
+    //Guarda todos los valores
+    QJsonArray jsonArray;
+    QString formato = this->fechaActual();
+    qDebug()<<"La hora que toma el sistema es: "<< formato;
+    objCarga.insert("id",QJsonValue::Null);
+    objCarga.insert("fecha",formato);
+    objCarga.insert("valor",datos["carga"].toDouble());
+    objTipo.insert("id",QJsonValue::Null);
+    objTipo.insert("tipo","CARGA");
+    objCarga.insert("idBateria",idBateria);
+    objCarga.insert("tipo",objTipo);
+    jsonArray.append(objCarga);
+    QJsonObject objCorriente;
+    objCorriente.insert("id",QJsonValue::Null);
+    objCorriente.insert("fecha",formato);
+    objCorriente.insert("valor",datos["corriente"].toDouble());
+    objTipo.insert("id",QJsonValue::Null);
+    objTipo.insert("tipo","CORRIENTE");
+    objCorriente.insert("tipo",objTipo);
+    objCorriente.insert("idBateria",idBateria);
+    jsonArray.append(objCorriente);
+    QJsonObject objTension;
+    objTension.insert("id",QJsonValue::Null);
+    objTension.insert("fecha",formato);
+    objTension.insert("valor",datos["voltaje"].toDouble());
+    objTipo.insert("id",QJsonValue::Null);
+    objTipo.insert("tipo","TENSION");
+    objTension.insert("tipo",objTipo);
+    objTension.insert("idBateria",idBateria);
+    jsonArray.append(objTension);
+    QJsonObject objTemperatura;
+    objTemperatura.insert("id",QJsonValue::Null);
+    objTemperatura.insert("fecha",formato);
+    objTemperatura.insert("valor",datos["temperatura"].toDouble());
+    objTipo.insert("id",QJsonValue::Null);
+    objTipo.insert("tipo","TEMPERATURA");
+    objTemperatura.insert("tipo",objTipo);
+    objTemperatura.insert("idBateria",idBateria);
+    jsonArray.append(objTemperatura);
+    return jsonArray;
+}
+//devuelve la fecha actual en formato Strign
+QString util::fechaActual(){
+    QDateTime horaUtc = QDateTime::currentDateTimeUtc();
+    // 2. Crear la zona horaria UTC-3 (3 horas * 3600 segundos = 10800)
+    QTimeZone zonaMenosTres(-10800);
+    // 3. Convertir la hora a la nueva zona
+    QDateTime horaLocal = horaUtc.toTimeZone(zonaMenosTres);
+    // Formatear a: yyyy-MM-dd HH:mm:ss
+    return horaLocal.toString("yyyy-MM-dd HH:mm:ss");
 }

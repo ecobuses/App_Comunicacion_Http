@@ -10,6 +10,8 @@ public:
     hilo();
     void setId(int id){this->id=id;}
     int getId(){return this->id;}
+    //Los datos de telemetria que quedaron guardados en el excel se tienen que enviar.
+    bool enviarDatosDelExcel();
 private:
     int id;
     util variableUtil;

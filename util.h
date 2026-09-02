@@ -13,10 +13,14 @@
 #include <QTextStream>
 #include <QSettings>
 #include <QNetworkInformation>
+#include <QTimeZone>
+#include <QJsonArray>
 class util
 {
 public:
     util();
+    //Envía un petición POST con los datos de telemetria.
+    //También devuelve el ID de la batería a la que corresponden esos datos.
     int  postHttp(QJsonArray &);
     // ------------------- Guardar datos de telemetría que no se pueden enviar --------------- //
         // Chequear si hay internet.
@@ -26,7 +30,10 @@ public:
         // Cuando se termine el proceso de enviar l
 
     // ---------------------------------------------------------------------------------------//
-    QString getPathId(){return this->pathId;}
+    //armarJSonArray - Crea objetos QJsonObject y los mete en un QJsonArray para enviar al servidor
+     QJsonArray armarQJsonArray(QJsonObject datos, int idBateria);
+    //devuelve la fecha actual en formato Strign
+     QString fechaActual();
 private:
     const  QString url="http://localhost:8080/magnitud";
 };
