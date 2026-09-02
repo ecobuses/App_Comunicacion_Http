@@ -31,7 +31,7 @@ public:
 
     // ---------------------------------------------------------------------------------------//
     //armarJSonArray - Crea objetos QJsonObject y los mete en un QJsonArray para enviar al servidor
-     QJsonArray armarQJsonArray(QJsonObject datos, int idBateria);
+     QJsonArray armarQJsonArray(QJsonObject* datos);
     //devuelve la fecha actual en formato Strign
      QString fechaActual();
 private:

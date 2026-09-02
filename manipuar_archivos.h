@@ -18,10 +18,11 @@ public:
     // ----------------------------------------//
 
     //--------------- archivo excel telemetrias fallidas ------------//
-    bool guardarDatoTelelmetria(QJsonObject obj);
+    bool guardarDatoTelelmetria(QJsonObject *obj);
     QJsonObject leerDatoTelemetria();
     //---------------------------------------------------------------//
 private:
+    void deStringAQJSonbject(QJsonObject* objeto,const QString linea);
     // Variable con la ruta del archvio donde se escribe el ID de la batería del ecobus en el sistema.
    const  QString pathId = "/home/pi/App_Comunicacion_Http/archivos_configuracion/valorId.txt";
     // Variable con la ruta del excel con las entradas.

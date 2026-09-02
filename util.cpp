@@ -59,17 +59,18 @@ bool determinarConexionAInternet(){
     return true;
 }
 //armarJSonArray - Crea objetos QJsonObject y los mete en un QJsonArray para enviar al servidor
-QJsonArray util::armarQJsonArray(QJsonObject datos, int idBateria){
+QJsonArray util::armarQJsonArray(QJsonObject* datos){
     //Guarda el tipo del dato
     QJsonObject objTipo;
     QJsonObject objCarga;
     //Guarda todos los valores
     QJsonArray jsonArray;
-    QString formato = this->fechaActual();
+    int idBateria = datos->value("idBateria").toInt();
+    QString formato = datos->value("fecha").toString();
     qDebug()<<"La hora que toma el sistema es: "<< formato;
     objCarga.insert("id",QJsonValue::Null);
     objCarga.insert("fecha",formato);
-    objCarga.insert("valor",datos["carga"].toDouble());
+    objCarga.insert("valor",datos->value("carga").toDouble());
     objTipo.insert("id",QJsonValue::Null);
     objTipo.insert("tipo","CARGA");
     objCarga.insert("idBateria",idBateria);
@@ -78,7 +79,7 @@ QJsonArray util::armarQJsonArray(QJsonObject datos, int idBateria){
     QJsonObject objCorriente;
     objCorriente.insert("id",QJsonValue::Null);
     objCorriente.insert("fecha",formato);
-    objCorriente.insert("valor",datos["corriente"].toDouble());
+    objCorriente.insert("valor",datos->value("corriente").toDouble());
     objTipo.insert("id",QJsonValue::Null);
     objTipo.insert("tipo","CORRIENTE");
     objCorriente.insert("tipo",objTipo);
@@ -87,7 +88,7 @@ QJsonArray util::armarQJsonArray(QJsonObject datos, int idBateria){
     QJsonObject objTension;
     objTension.insert("id",QJsonValue::Null);
     objTension.insert("fecha",formato);
-    objTension.insert("valor",datos["voltaje"].toDouble());
+    objTension.insert("valor",datos->value("voltaje").toDouble());
     objTipo.insert("id",QJsonValue::Null);
     objTipo.insert("tipo","TENSION");
     objTension.insert("tipo",objTipo);
@@ -96,7 +97,7 @@ QJsonArray util::armarQJsonArray(QJsonObject datos, int idBateria){
     QJsonObject objTemperatura;
     objTemperatura.insert("id",QJsonValue::Null);
     objTemperatura.insert("fecha",formato);
-    objTemperatura.insert("valor",datos["temperatura"].toDouble());
+    objTemperatura.insert("valor",datos->value("temperatura").toDouble());
     objTipo.insert("id",QJsonValue::Null);
     objTipo.insert("tipo","TEMPERATURA");
     objTemperatura.insert("tipo",objTipo);
