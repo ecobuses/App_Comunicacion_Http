@@ -12,15 +12,15 @@ void hilo::run(){
     while(true){
         //Se duerme 5 minutos si 300 es el argumento
         sleep(300);
+        //Recibe los datos de la aplicación pantallaBus.
+        // No necesito crear un QObject nuevo para guardar los datos de telemtria
+        // Solo tengo que modificar este.
+         QJsonObject datos = server.getDatos();
         //Determino si hay internet
         bool hayInternet = variableUtil.determinarConexionAInternet();
         int respuesta = -2;
         //Guarda todos los valores
         QJsonArray jsonArray;
-        //Recibe los datos de la aplicación pantallaBus.
-        // No necesito crear un QObject nuevo para guardar los datos de telemtria
-        // Solo tengo que modificar este.
-        QJsonObject datos = server.getDatos();
         datos["fecha"] = variableUtil.fechaActual();
         datos["idBateria"] = idBateria;
         qDebug()<<"Datos carga: " << datos["carga"];
