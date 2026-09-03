@@ -6,14 +6,14 @@ hilo::hilo() {
 void hilo::run(){
     int idBateria = mp.leerIdArchivo();
     Servidor server;
-    if(!server.iniciar("/tmp/mi_socket_telemetria")){
+    if(!server.iniciar("telemetria")){
         qDebug()<<"No hay conexión entre aplicaciones";
     }
     while(true){
         qDebug()<<"El id es "<<idBateria;
-        sleep(300);
+        sleep(30);
         //Determino si hay internet
-        bool hayInternet = variableUtil.determinarConexionAInternet();
+        bool hayInternet = true;//variableUtil.determinarConexionAInternet();
         int respuesta = -2;
         //Guarda todos los valores
         QJsonArray jsonArray;
