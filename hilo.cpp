@@ -4,38 +4,32 @@
 hilo::hilo() {
 }
 void hilo::run(){
+    Servidor server;
     int idBateria = mp.leerIdArchivo();
-    if(!server.iniciar("/tmp/mi_socket_telemetria")){
+    if(!server.iniciar("telemetria")){
         qDebug()<<"No hay conexión entre aplicaciones";
     }
     while(true){
         qDebug()<<"El id es "<<idBateria;
-
-        //Se duerme 5 minutos si 300 es el argumento
         sleep(300);
-        //Recibe los datos de la aplicación pantallaBus.
-        // No necesito crear un QObject nuevo para guardar los datos de telemtria
-        // Solo tengo que modificar este.
-         QJsonObject datos = server.getDatos();
-        //Determino si hay internet
-        bool hayInternet = variableUtil.determinarConexionAInternet();
-        int respuesta = -2;
-        //Guarda todos los valores
         QJsonArray jsonArray;
-        datos["fecha"] = variableUtil.fechaActual();
-        datos["idBateria"] = idBateria;
+        QJsonObject datos = server.getDatos();
         qDebug()<<"Datos carga: " << datos["carga"];
         qDebug()<<"Datos corriente: " << datos["corriente"];
         qDebug()<<"Datos voltaje: " << datos["voltaje"];
         qDebug()<<"Datos temperatura: " << datos["temperatura"];
+        //Guarda todos los valores
+        datos["fecha"] = variableUtil.fechaActual();
+        datos["idBateria"] = idBateria;
         //No quiero que me mande datos vacios.
-        if(datos["carga"] != QJsonValue::Null
-            &&datos["corriente"] != QJsonValue::Null
-            &&datos["voltaje"] != QJsonValue::Null
-            &&datos["temperatura"] != QJsonValue::Null
+        if(!datos.isEmpty()
         ){
+             int respuesta=-1;
+            //Determino si hay internet
+            bool hayInternet = variableUtil.determinarConexionAInternet();
             //Determino si tengo conexión a internet.
             if(hayInternet){
+                //Tengo que poder determinar si el servidor esta vivo
                 //Envío datos del Excel si hay
                 enviarDatosDelExcel(&variableUtil,&mp);
                 //Luego voy a enviar el dato leído actual.
@@ -62,9 +56,10 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp){
     QJsonObject obj;
     QJsonArray aEnviar;
     obj = mp->leerDatoTelemetria();
-    while(!obj.empty()){
+    while(!obj.isEmpty()){
         aEnviar = u->armarQJsonArray(&obj);
         id = u->postHttp(aEnviar);
+        obj = mp->leerDatoTelemetria();
     }
 
 }

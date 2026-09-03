@@ -37,7 +37,7 @@ bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto){
     QString sep = ",";
     if(archivo.size() == 0){
         //Defino el encabezado del excel
-        salida <<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria";
+        salida <<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
     }
     //Esto lo tengo que chequear. Me tengo que fijar que esas key existan
     salida<<objeto->value("fecha").toString()<<sep;

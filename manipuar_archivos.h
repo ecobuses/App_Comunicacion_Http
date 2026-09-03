@@ -26,7 +26,7 @@ private:
     // Variable con la ruta del archvio donde se escribe el ID de la batería del ecobus en el sistema.
    const  QString pathId = "/home/pi/App_Comunicacion_Http/archivos_configuracion/valorId.txt";
     // Variable con la ruta del excel con las entradas.
-   const QString pathExcelTelemetria = "home/pi/App_Comunicacion_Http/archivos_configuracion/telemetrias.csv";
+   const QString pathExcelTelemetria = "/home/pi/App_Comunicacion_Http/archivos_configuracion/telemetrias.csv";
 };
 
 #endif // MANIPUAR_ARCHIVOS_H

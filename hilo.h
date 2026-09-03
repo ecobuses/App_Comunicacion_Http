@@ -18,7 +18,6 @@ private:
     int id;
     util variableUtil;
     Manipular_Archivos mp;
-    Servidor server;
     //Funciones
     void validacionDeId(int* id,int * idBateria);
 protected:
