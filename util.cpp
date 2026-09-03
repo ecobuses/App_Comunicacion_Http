@@ -42,7 +42,7 @@ int util::postHttp(QJsonArray &json){
     }
 }
 // Utiliza la librería QNetworkInformation que viene a partir de QT.6 para determinar si hay conexión.
-bool determinarConexionAInternet(){
+bool util::determinarConexionAInternet(){
     if(QNetworkInformation::loadDefaultBackend()){
         QNetworkInformation *info = QNetworkInformation::instance();
 

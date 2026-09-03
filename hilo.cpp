@@ -6,7 +6,7 @@ hilo::hilo() {
 void hilo::run(){
     int idBateria = mp.leerIdArchivo();
     Servidor server;
-    if(!server.iniciar("telemetria")){
+    if(!server.iniciar("/tmp/mi_socket_telemetria")){
         qDebug()<<"No hay conexión entre aplicaciones";
     }
     while(true){

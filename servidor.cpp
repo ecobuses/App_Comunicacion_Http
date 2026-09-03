@@ -32,6 +32,7 @@ void Servidor::nuevaConexion()
         server->nextPendingConnection();
 
     if(!socket){
+        qDebug()<<"El probema esta aca";
         return;
     }
 
