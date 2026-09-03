@@ -10,7 +10,7 @@ void hilo::run(){
         qDebug()<<"No hay conexión entre aplicaciones";
     }
     while(true){
-        //Se duerme 5 minutos si 300 es el argumento
+        qDebug()<<"El id es "<<idBateria;
         sleep(300);
         //Determino si hay internet
         bool hayInternet = variableUtil.determinarConexionAInternet();

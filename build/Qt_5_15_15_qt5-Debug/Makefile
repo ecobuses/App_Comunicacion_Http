@@ -54,12 +54,18 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../../hilo.cpp \
 		../../main.cpp \
+<<<<<<< HEAD
 		../../manipuar_archivos.cpp \
+=======
+>>>>>>> main
 		../../servidor.cpp \
 		../../util.cpp moc_servidor.cpp
 OBJECTS       = hilo.o \
 		main.o \
+<<<<<<< HEAD
 		manipuar_archivos.o \
+=======
+>>>>>>> main
 		servidor.o \
 		util.o \
 		moc_servidor.o
@@ -150,11 +156,17 @@ DIST          = ../../config.ini \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../../../../AppComunicacionTelemetria.pro ../../hilo.h \
+<<<<<<< HEAD
 		../../manipuar_archivos.h \
 		../../servidor.h \
 		../../util.h ../../hilo.cpp \
 		../../main.cpp \
 		../../manipuar_archivos.cpp \
+=======
+		../../servidor.h \
+		../../util.h ../../hilo.cpp \
+		../../main.cpp \
+>>>>>>> main
 		../../servidor.cpp \
 		../../util.cpp
 QMAKE_TARGET  = AppComunicacionTelemetria
@@ -356,8 +368,13 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
+<<<<<<< HEAD
 	$(COPY_FILE) --parents ../../hilo.h ../../manipuar_archivos.h ../../servidor.h ../../util.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../../hilo.cpp ../../main.cpp ../../manipuar_archivos.cpp ../../servidor.cpp ../../util.cpp $(DISTDIR)/
+=======
+	$(COPY_FILE) --parents ../../hilo.h ../../servidor.h ../../util.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../hilo.cpp ../../main.cpp ../../servidor.cpp ../../util.cpp $(DISTDIR)/
+>>>>>>> main
 
 
 clean: compiler_clean 
@@ -413,18 +430,27 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 hilo.o: ../../hilo.cpp ../../hilo.h \
 		../../util.h \
+<<<<<<< HEAD
 		../../manipuar_archivos.h \
+=======
+>>>>>>> main
 		../../servidor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o hilo.o ../../hilo.cpp
 
 main.o: ../../main.cpp ../../hilo.h \
 		../../util.h \
+<<<<<<< HEAD
 		../../manipuar_archivos.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
 
 manipuar_archivos.o: ../../manipuar_archivos.cpp ../../manipuar_archivos.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o manipuar_archivos.o ../../manipuar_archivos.cpp
 
+=======
+		../../servidor.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../../main.cpp
+
+>>>>>>> main
 servidor.o: ../../servidor.cpp ../../servidor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o servidor.o ../../servidor.cpp
 
