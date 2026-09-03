@@ -43,20 +43,22 @@ int util::postHttp(QJsonArray &json){
 }
 
 // Utiliza la librería QNetworkInformation que viene a partir de QT.6 para determinar si hay conexión.
-bool util::determinarConexionAInternet(){
-    if(QNetworkInformation::loadDefaultBackend()){
+
+bool util::determinarConexionAInternet() {
+    if (QNetworkInformation::loadDefaultBackend()) {
         QNetworkInformation *info = QNetworkInformation::instance();
 
-        if(info && info->reachability() == QNetworkInformation::Reachability::Online){
-            qDebug()<< "Archivo util/determinarConexionAInternet - Hay internet";
+        if (info &&
+            info->reachability() == QNetworkInformation::Reachability::Online) {
+            qDebug() << "Archivo util/determinarConexionAInternet - Hay internet";
             return true;
-        }else
-        {
-            qDebug()<<"Archivo util/determinarConexionAInternet - No hay internet";
+        } else {
+            qDebug() << "Archivo util/determinarConexionAInternet - No hay internet";
             return false;
         }
     }
-    qDebug()<< "Archivo util/determinarConexionAInternet - No se pudo determinar";
+    qDebug()
+        << "Archivo util/determinarConexionAInternet - No se pudo determinar";
     return true;
 }
 //armarJSonArray - Crea objetos QJsonObject y los mete en un QJsonArray para enviar al servidor

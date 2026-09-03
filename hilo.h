@@ -4,6 +4,7 @@
 #include <QTimeZone>
 #include "util.h"
 #include "manipuar_archivos.h"
+#include "servidor.h"
 class hilo:public QThread
 {
 public:
@@ -17,6 +18,7 @@ private:
     int id;
     util variableUtil;
     Manipular_Archivos mp;
+    Servidor server;
     //Funciones
     void validacionDeId(int* id,int * idBateria);
 protected:

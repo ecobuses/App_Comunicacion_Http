@@ -5,22 +5,23 @@ hilo::hilo() {
 }
 void hilo::run(){
     int idBateria = mp.leerIdArchivo();
-    Servidor server;
-    if(!server.iniciar("telemetria")){
+    if(!server.iniciar("/tmp/mi_socket_telemetria")){
         qDebug()<<"No hay conexión entre aplicaciones";
     }
     while(true){
         qDebug()<<"El id es "<<idBateria;
-        sleep(30);
-        //Determino si hay internet
-        bool hayInternet = true;//variableUtil.determinarConexionAInternet();
-        int respuesta = -2;
-        //Guarda todos los valores
-        QJsonArray jsonArray;
+
+        //Se duerme 5 minutos si 300 es el argumento
+        sleep(300);
         //Recibe los datos de la aplicación pantallaBus.
         // No necesito crear un QObject nuevo para guardar los datos de telemtria
         // Solo tengo que modificar este.
-        QJsonObject datos = server.getDatos();
+         QJsonObject datos = server.getDatos();
+        //Determino si hay internet
+        bool hayInternet = variableUtil.determinarConexionAInternet();
+        int respuesta = -2;
+        //Guarda todos los valores
+        QJsonArray jsonArray;
         datos["fecha"] = variableUtil.fechaActual();
         datos["idBateria"] = idBateria;
         qDebug()<<"Datos carga: " << datos["carga"];
