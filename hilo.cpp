@@ -31,7 +31,9 @@ void hilo::run(){
             if(hayInternet){
                 //Tengo que poder determinar si el servidor esta vivo
                 //Envío datos del Excel si hay
-                enviarDatosDelExcel(&variableUtil,&mp);
+                if(servidorAlive){
+                    enviarDatosDelExcel(&variableUtil,&mp);
+                }
                 //Luego voy a enviar el dato leído actual.
                 jsonArray = variableUtil.armarQJsonArray(&datos);
                 respuesta = variableUtil.postHttp(jsonArray);

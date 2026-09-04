@@ -16,6 +16,7 @@ public:
 private:
     //Variables
     int id;
+    bool servidorAlive = false;
     util variableUtil;
     Manipular_Archivos mp;
     //Funciones
