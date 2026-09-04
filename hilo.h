@@ -4,6 +4,7 @@
 #include <QTimeZone>
 #include "util.h"
 #include "manipuar_archivos.h"
+#include "servidor.h"
 class hilo:public QThread
 {
 public:
@@ -15,6 +16,7 @@ public:
 private:
     //Variables
     int id;
+    bool servidorAlive = false;
     util variableUtil;
     Manipular_Archivos mp;
     //Funciones

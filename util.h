@@ -36,6 +36,7 @@ public:
      QString fechaActual();
 private:
     const  QString url="http://localhost:8080/magnitud";
+    const  QString pathId = "/home/pi/App_Comunicacion_Http/archivos_configuracion/valorId.txt";
 };
 
 #endif // UTIL_H
