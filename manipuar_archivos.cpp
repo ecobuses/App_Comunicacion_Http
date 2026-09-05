@@ -40,13 +40,15 @@ bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto){
         salida <<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
     }
     //Esto lo tengo que chequear. Me tengo que fijar que esas key existan
-    salida<<objeto->value("fecha").toVariant().toString()<<sep;
-    qDebug()<<"Que se guarda en el Excel"<<objeto->value("carga").toVariant().toString();
-    salida<<objeto->value("carga").toVariant().toString()<<sep;
-    salida<<objeto->value("corriente").toVariant().toString()<<sep;
-    salida<<objeto->value("voltaje").toVariant().toString()<<sep;
-    salida<<objeto->value("temperatura").toVariant().toString()<<sep;
-    salida<<objeto->value("idBateria").toVariant().toString()<<"\n";
+    if(!objeto->isEmpty()){
+        salida<<objeto->value("fecha").toVariant().toString()<<sep;
+        qDebug()<<"Que se guarda en el Excel"<<objeto->value("carga").toVariant().toString();
+        salida<<objeto->value("carga").toVariant().toString()<<sep;
+        salida<<objeto->value("corriente").toVariant().toString()<<sep;
+        salida<<objeto->value("voltaje").toVariant().toString()<<sep;
+        salida<<objeto->value("temperatura").toVariant().toString()<<sep;
+        salida<<objeto->value("idBateria").toVariant().toString()<<"\n";
+    }
     //Escribo para que pase a la fila siguiente.
 
     //Cierro el archivo
