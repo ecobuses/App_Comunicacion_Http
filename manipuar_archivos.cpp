@@ -26,7 +26,7 @@ bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto){
     //Obtengo el archivo.
     QFile archivo(pathExcelTelemetria);
     //Abro el archivo
-    if(!archivo.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if(!archivo.open(QIODevice::WriteOnly | QIODevice::Append)) {
         // Si no puedo abrirlo, no puedo escribir.
         qDebug()<<"Manipular_Arcivos/guardarDatoTelemetria - No pudo abrir el excel para escribir las telemetrias";
         return false;
