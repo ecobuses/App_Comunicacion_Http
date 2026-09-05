@@ -37,6 +37,7 @@ void hilo::run(){
                 //Luego voy a enviar el dato leído actual.
                 jsonArray = variableUtil.armarQJsonArray(&datos);
                 respuesta = variableUtil.postHttp(jsonArray);
+                qDebug()<<"Se guardo la entrada que llego en el momento";
                 //Se ingresaron correctamente los datos.
                 validacionDeId(&respuesta,&idBateria);
             }
@@ -58,15 +59,21 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp){
     QJsonObject obj;
     QJsonArray aEnviar;
     obj = mp->leerDatoTelemetria();
+    int respuesta=0;
     while(!obj.isEmpty()){
+        if(id != obj["idBateria"]){
+            obj["idBateria"] = id;
+        }
         aEnviar = u->armarQJsonArray(&obj);
-        id = u->postHttp(aEnviar);
+        //Qué pasa si el ID guardado por alguna razón está desactualizado?
+        respuesta = u->postHttp(aEnviar);
+        validacionDeId(&respuesta,&id);
         obj = mp->leerDatoTelemetria();
     }
 
 }
 void hilo::validacionDeId(int* respuesta, int* idBateria){
-    if(*respuesta != -1 && id != -1){
+    if(*respuesta != -1/* && id != -1*/){
         *idBateria = *respuesta;
         mp.guardarIdArchivo(*idBateria);
         //No se encontro la batería a la que pertenecen esos datos
