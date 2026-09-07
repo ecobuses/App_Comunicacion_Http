@@ -70,7 +70,6 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp){
         validacionDeId(&respuesta,&id);
         obj = mp->leerDatoTelemetria();
     }
-
 }
 void hilo::validacionDeId(int* respuesta, int* idBateria){
     if(*respuesta != -1/* && id != -1*/){

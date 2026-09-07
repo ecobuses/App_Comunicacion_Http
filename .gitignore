@@ -1,0 +1,32 @@
+# Archivos de configuración de Qt Creator 
+*.pro.user
+*.pro.user.*
+*.qmake.cache 
+*.qmake.stash 
+# Directorios de compilación (Build directories) 
+build-*/ 
+*build-*/ 
+Debug/ 
+Release/
+ # Archivos objeto y librerías compiladas 
+*.o 
+*.a 
+*.so 
+*.so.*
+*.dll 
+*.dylib 
+*.lib 
+*.exe 
+# Archivos generados por MOC (Meta-Object Compiler) 
+moc_*.cpp
+ moc_*.h 
+ # Archivos generados por RCC (Resource Compiler) 
+ qrc_*.cpp 
+ # Archivos generados por UIC (User Interface Compiler) 
+ ui_*.h 
+ # Archivos temporales y de respaldo 
+ *.autosave 
+ *~ .
+ #* 
+ # Archivos de traducción generados 
+ *.qm 
