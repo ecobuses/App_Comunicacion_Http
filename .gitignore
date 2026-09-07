@@ -30,3 +30,5 @@ moc_*.cpp
  #* 
  # Archivos de traducción generados 
  *.qm 
+#Carpetas
+archivos_configuracion/

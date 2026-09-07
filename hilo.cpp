@@ -31,12 +31,15 @@ void hilo::run(){
             if(hayInternet){
                 //Tengo que poder determinar si el servidor esta vivo
                 //Envío datos del Excel si hay
+                servidorAlive = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+"/util/isAlive")) == 1? true:false;
+                qDebug()<<"Que recibio servidorAlive" << servidorAlive;
                 if(servidorAlive){
+                    qDebug()<<"Esta vivo";
                     enviarDatosDelExcel(&variableUtil,&mp);
                 }
                 //Luego voy a enviar el dato leído actual.
                 jsonArray = variableUtil.armarQJsonArray(&datos);
-                respuesta = variableUtil.postHttp(jsonArray);
+                respuesta = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+"/magnitud"));
                 qDebug()<<"Se guardo la entrada que llego en el momento";
                 //Se ingresaron correctamente los datos.
                 validacionDeId(&respuesta,&idBateria);
@@ -66,7 +69,7 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp){
         }
         aEnviar = u->armarQJsonArray(&obj);
         //Qué pasa si el ID guardado por alguna razón está desactualizado?
-        respuesta = u->postHttp(aEnviar);
+        respuesta = u->postHttp(aEnviar,this->ulrServidor+"/magnitud");
         validacionDeId(&respuesta,&id);
         obj = mp->leerDatoTelemetria();
     }

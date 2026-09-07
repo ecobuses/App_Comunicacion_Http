@@ -49,7 +49,6 @@ bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto){
         salida<<objeto->value("temperatura").toVariant().toString()<<sep;
         salida<<objeto->value("idBateria").toVariant().toString()<<"\n";
     }
-    //Escribo para que pase a la fila siguiente.
 
     //Cierro el archivo
     archivo.close();

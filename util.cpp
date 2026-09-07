@@ -3,7 +3,7 @@
 util::util() {
 
 }
-int util::postHttp(QJsonArray &json){
+int util::postHttp(QJsonArray &json,QString url){
 
 
     // create custom temporary event loop on stack
@@ -14,7 +14,8 @@ int util::postHttp(QJsonArray &json){
     QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
     // the HTTP request
-    QNetworkRequest req(QUrl(QString("http://100.103.238.52:8080/magnitud") ) );
+    QUrl urlq(url);
+    QNetworkRequest req(urlq);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QNetworkReply *reply = mgr.post(req,QJsonDocument(json).toJson());
     QTimer *timer = new QTimer();
