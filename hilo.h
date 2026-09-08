@@ -21,6 +21,7 @@ private:
     Manipular_Archivos mp;
     //Funciones
     void validacionDeId(int* id,int * idBateria);
+    QString ulrServidor = "http://100.103.238.52:8080";
 protected:
     void run();
 };
