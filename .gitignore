@@ -5,7 +5,8 @@
 *.qmake.stash 
 # Directorios de compilación (Build directories) 
 build-*/ 
-*build-*/ 
+*build-*/
+*build/ 
 Debug/ 
 Release/
  # Archivos objeto y librerías compiladas 
@@ -32,3 +33,6 @@ moc_*.cpp
  *.qm 
 #Carpetas
 archivos_configuracion/
+# Archivos
+valorId.txt
+telemetrias.csv

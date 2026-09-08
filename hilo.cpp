@@ -28,15 +28,13 @@ void hilo::run(){
             //Determino si hay internet
             bool hayInternet = variableUtil.determinarConexionAInternet();
             //Determino si tengo conexión a internet.
-            if(hayInternet){
+            //Envío datos del Excel si hay
+            servidorAlive = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+"/util/isAlive")) == 1? true:false;
+            if(hayInternet && servidorAlive){
                 //Tengo que poder determinar si el servidor esta vivo
-                //Envío datos del Excel si hay
-                servidorAlive = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+"/util/isAlive")) == 1? true:false;
                 qDebug()<<"Que recibio servidorAlive" << servidorAlive;
-                if(servidorAlive){
-                    qDebug()<<"Esta vivo";
-                    enviarDatosDelExcel(&variableUtil,&mp);
-                }
+                qDebug()<<"Esta vivo";
+                enviarDatosDelExcel(&variableUtil,&mp);
                 //Luego voy a enviar el dato leído actual.
                 jsonArray = variableUtil.armarQJsonArray(&datos);
                 respuesta = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+"/magnitud"));
@@ -47,7 +45,7 @@ void hilo::run(){
             //Surgio un error al enviar la petición HTTP, es decir no se enviaron los datos al servidor.
             //En este caso también tendría que guardar los datos, y luego intentar volver a enviarlos.
             //solo quiero que intente enviar información si tiene internet
-            if(respuesta == -1 || !hayInternet){
+            if(!servidorAlive || !hayInternet){
                 //Bien aca lo que yo tengo que hacer es escribir los datos en el excel.
                 mp.guardarDatoTelelmetria(&datos);
                 qDebug()<<"Se guardaron datos de telemetria en el Excel";
@@ -64,9 +62,8 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp){
     obj = mp->leerDatoTelemetria();
     int respuesta=0;
     while(!obj.isEmpty()){
-        if(id != obj["idBateria"]){
-            obj["idBateria"] = id;
-        }
+
+        qDebug()<<"Que tiene el objeto antes de enviarlo "<<obj["idBateria"];
         aEnviar = u->armarQJsonArray(&obj);
         //Qué pasa si el ID guardado por alguna razón está desactualizado?
         respuesta = u->postHttp(aEnviar,this->ulrServidor+"/magnitud");
@@ -79,7 +76,7 @@ void hilo::validacionDeId(int* respuesta, int* idBateria){
         *idBateria = *respuesta;
         mp.guardarIdArchivo(*idBateria);
         //No se encontro la batería a la que pertenecen esos datos
-    }else if(respuesta == 0){
+    }else if(*respuesta == 0){
         *idBateria = -1;
     }
 }

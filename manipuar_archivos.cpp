@@ -66,6 +66,10 @@ QJsonObject Manipular_Archivos::leerDatoTelemetria(){
     }
     QTextStream entrada(&archivo);
     //Leo la primera linea
+    if(!entrada.atEnd()){
+        //Leo las cabeceras.
+        entrada.readLine();
+    }
     QString primeraLinea = entrada.readLine();
     //Si la primera linea no tiene nada
     if(primeraLinea.isNull()){
@@ -82,17 +86,20 @@ QJsonObject Manipular_Archivos::leerDatoTelemetria(){
         qDebug()<<"No pude abrir el archivo excel para re-escribir los datos de telemetria guardados";
         return leeido;
     }
+    QString sep = ",";
     QTextStream salida(&archivo);
+    salida<<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
     salida<<restoDelArchivo;
     archivo.close();
+    qDebug()<<"que recupera del excel "<<leeido.value("idBateria");
     return leeido;
 }
 void Manipular_Archivos::deStringAQJSonbject(QJsonObject* objeto,const QString linea){
     QStringList columnas = linea.split(",");
-    objeto->insert("fecha",columnas.value(0));
-    objeto->insert("carga",columnas.value(1));
-    objeto->insert("corriente",columnas.value(2));
-    objeto->insert("voltaje",columnas.value(3));
-    objeto->insert("temperatura",columnas.value(4));
-    objeto->insert("idBateria",columnas.value(5));
+    objeto->insert("fecha",columnas.value(0).trimmed());
+    objeto->insert("carga",columnas.value(1).trimmed().toDouble());
+    objeto->insert("corriente",columnas.value(2).trimmed().toDouble());
+    objeto->insert("voltaje",columnas.value(3).trimmed().toDouble());
+    objeto->insert("temperatura",columnas.value(4).trimmed().toInt());
+    objeto->insert("idBateria",columnas.value(5).trimmed().toInt());
 }
