@@ -9,6 +9,7 @@ CONFIG += c++17 console
 SOURCES += \
         hilo.cpp \
         main.cpp \
+        manipuar_archivos.cpp \
         servidor.cpp \
         util.cpp
 
@@ -19,6 +20,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     hilo.h \
+    manipuar_archivos.h \
     servidor.h \
     util.h
 

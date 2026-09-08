@@ -15,13 +15,13 @@ bool Servidor::iniciar(const QString &nombrePipe)
                  << server->errorString();
         return false;
     }
-
+    server->setSocketOptions(QLocalServer::WorldAccessOption);
     connect(server,
             &QLocalServer::newConnection,
             this,
             &Servidor::nuevaConexion);
 
-    qDebug() << "Servidor escuchando";
+    qDebug() << "Servidor escuchando en " << server->fullServerName();
 
     return true;
 }
@@ -67,7 +67,7 @@ void Servidor::leerDatos(QLocalSocket *socket)
 
     if(error.error != QJsonParseError::NoError){
 
-        qDebug() << "JSON inválido";
+        qDebug() << "JSON inv�lido";
         return;
     }
 
