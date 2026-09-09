@@ -20,7 +20,8 @@ public:
     QJsonObject getDatos(){return this->datos;}
 private slots:
     void nuevaConexion();
-
+signals:
+    void datosRecibidos();
 private:
     void leerDatos(QLocalSocket *socket);
     void clienteDesconectado(QLocalSocket *socket);

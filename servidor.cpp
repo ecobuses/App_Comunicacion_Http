@@ -62,8 +62,7 @@ void Servidor::leerDatos(QLocalSocket *socket)
 
     QJsonParseError error;
 
-    QJsonDocument doc =
-        QJsonDocument::fromJson(data, &error);
+    QJsonDocument doc =QJsonDocument::fromJson(data, &error);
 
     if(error.error != QJsonParseError::NoError){
 
@@ -73,19 +72,19 @@ void Servidor::leerDatos(QLocalSocket *socket)
 
     datos = doc.object();
     this->setDatos(doc.object());
-    qDebug()<<"Carga: "<<datos["carga"];
+    // qDebug()<<"Carga: "<<datos["carga"];
     qDebug() << "\n--- MENSAJE RECIBIDO ---";
 
-    qDebug() << "Voltaje:"
-             << datos["voltaje"].toDouble();
+    // qDebug() << "Voltaje:"
+    //          << datos["voltaje"].toDouble();
 
-    qDebug() << "Temperatura:"
-             << datos["temperatura"].toDouble();
+    // qDebug() << "Temperatura:"
+    //          << datos["temperatura"].toDouble();
 
-    qDebug() << "Corriente:"
-             << datos["corriente"].toDouble();
-    qDebug() << "Carga:"
-             << datos["carga"].toDouble();
+    // qDebug() << "Corriente:"
+    //          << datos["corriente"].toDouble();
+    // qDebug() << "Carga:"
+    //          << datos["carga"].toDouble();
 
     QJsonObject respuesta;
 
@@ -96,6 +95,8 @@ void Servidor::leerDatos(QLocalSocket *socket)
     socket->write(respuestaDoc.toJson());
 
     socket->flush();
+    //Emito la señal de que los datos fueron recibidos
+    emit datosRecibidos();
 }
 
 void Servidor::clienteDesconectado(QLocalSocket *socket)
