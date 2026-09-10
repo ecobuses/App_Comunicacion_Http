@@ -37,7 +37,6 @@ ui_*.h
 
 # Archivos de traducción generados
 *.qm
-=======
 # Archivos de configuración de Qt Creator 
 *.pro.user
 *.pro.user.*

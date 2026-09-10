@@ -4,15 +4,17 @@
 hilo::hilo() {
 }
 void hilo::run(){
+    server = new Servidor(this);
+    servidor2 = new Servidor(this);
     idBateria = mp.leerIdArchivo();
-    if(!server.iniciar("telemetria")){
+    if(!server->iniciar("telemetria")){
         qDebug()<<"No hay conexión entre aplicaciones";
     }
-    if(!servidor2.iniciar("carga_descarga")){
+    if(!servidor2->iniciar("carga_descarga")){
         qDebug()<<"No hay conexión para la carga/descarga";
     }
-    connect(&server,&Servidor::datosRecibidos,this,&hilo::procesarTramasTelemetria);
-    connect(&servidor2, &Servidor::datosRecibidos, this, &hilo::procesarTramasCargaDescarga);
+    connect(server,&Servidor::datosRecibidos,this,&hilo::procesarTramasTelemetria);
+    connect(servidor2, &Servidor::datosRecibidos, this, &hilo::procesarTramasCargaDescarga);
     exec();
 }
 void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp){
@@ -43,7 +45,7 @@ void hilo::validacionDeId(int* respuesta, int* idBateria){
 void hilo::procesarTramasTelemetria(){
     qDebug()<<"El id es "<<idBateria;
     QJsonArray jsonArray;
-    QJsonObject datos = server.getDatos();
+    QJsonObject datos = server->getDatos();
     qDebug()<<"Datos carga: " << datos["carga"];
     qDebug()<<"Datos corriente: " << datos["corriente"];
     qDebug()<<"Datos voltaje: " << datos["voltaje"];
@@ -88,7 +90,7 @@ void hilo::procesarTramasTelemetria(){
 //Recibo los datos carga/descarga
 void hilo::procesarTramasCargaDescarga(){
     // Recibo los datos.
-    QJsonObject datos = servidor2.getDatos();
+    QJsonObject datos = servidor2->getDatos();
     datos["idBateria"] = idBateria;
     QJsonArray jsonArray;
     if(!variableUtil.determinarConexionAInternet()){

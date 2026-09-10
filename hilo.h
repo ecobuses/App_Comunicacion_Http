@@ -28,9 +28,9 @@ private:
     void validacionDeId(int* id,int * idBateria);
     QString ulrServidor = "http://100.103.238.52:8080";
     //Este servidor recibe la telemetría.
-    Servidor server;
+    Servidor *server{nullptr};
     //Este servidro recibe el ciclo de carga/descarga.
-    Servidor servidor2;
+    Servidor *servidor2{nullptr};
 protected:
     void run();
 };

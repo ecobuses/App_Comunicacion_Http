@@ -35,7 +35,7 @@ void Servidor::nuevaConexion()
         return;
     }
 
-    qDebug() << "Cliente conectado";
+    qDebug() << "Cliente conectado" << server->fullServerName();
 
     connect(socket,
             &QLocalSocket::readyRead,
@@ -54,11 +54,18 @@ void Servidor::nuevaConexion()
                 clienteDesconectado(socket);
 
             });
+    if(socket->bytesAvailable()>0){
+        leerDatos(socket);
+    }
 }
 
 void Servidor::leerDatos(QLocalSocket *socket)
 {
     QByteArray data = socket->readAll();
+    if(data.isEmpty()){
+        qDebug()<<"Datos vacíos, no tenía nada";
+        return;
+    }
 
     QJsonParseError error;
 
