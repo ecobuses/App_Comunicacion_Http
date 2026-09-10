@@ -14,15 +14,21 @@ void hilo::run(){
     if(!servidor2->iniciar("carga_descarga")){
         qDebug()<<"No hay conexión para la carga/descarga";
     }
-    connect(server,&Servidor::datosRecibidos,this,&hilo::procesarTramasTelemetria);
-    connect(servidor2, &Servidor::datosRecibidos, this, &hilo::procesarTramasCargaDescarga);
-    connect(servidor3, &Servidor::datosRecibidos, this, &hilo::procesarTramasGps);
+    connect(server,&Servidor::datosRecibidos,this,[=](){
+        this->procesarTramas(server,"/telemetria",0);
+    });
+    connect(servidor2, &Servidor::datosRecibidos, this, [=](){
+        this->procesarTramas(servidor2,"/cargaDescarga",1);
+    });
+    connect(servidor3, &Servidor::datosRecibidos, this, [=](){
+        this->procesarTramas(servidor3,"/gps",2);
+    });
     exec();
 }
-void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp){
+void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp,const QString path,QStringList cabeceras){
     QJsonObject obj;
     QJsonArray aEnviar;
-    obj = mp->leerDatoTelemetria();
+    obj = mp->leerDatoTelemetria(path,cabeceras);
     int respuesta=0;
     while(!obj.isEmpty()){
 
@@ -31,7 +37,7 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp){
         //Qué pasa si el ID guardado por alguna razón está desactualizado?
         respuesta = u->postHttp(aEnviar,this->ulrServidor+"/magnitud");
         validacionDeId(&respuesta,&idBateria);
-        obj = mp->leerDatoTelemetria();
+        obj = mp->leerDatoTelemetria(path,cabeceras);
     }
 }
 void hilo::validacionDeId(int* respuesta, int* idBateria){
@@ -44,14 +50,10 @@ void hilo::validacionDeId(int* respuesta, int* idBateria){
     }
 }
 //Recibo los datos de telemtria.
-void hilo::procesarTramasTelemetria(){
+void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
     qDebug()<<"El id es "<<idBateria;
     QJsonArray jsonArray;
-    QJsonObject datos = server->getDatos();
-    qDebug()<<"Datos carga: " << datos["carga"];
-    qDebug()<<"Datos corriente: " << datos["corriente"];
-    qDebug()<<"Datos voltaje: " << datos["voltaje"];
-    qDebug()<<"Datos temperatura: " << datos["temperatura"];
+    QJsonObject datos = servidor->getDatos();
     //Guarda todos los valores
     datos["fecha"] = variableUtil.fechaActual();
     datos["idBateria"] = idBateria;
@@ -68,10 +70,28 @@ void hilo::procesarTramasTelemetria(){
             //Tengo que poder determinar si el servidor esta vivo
             qDebug()<<"Que recibio servidorAlive" << servidorAlive;
             qDebug()<<"Esta vivo";
-            enviarDatosDelExcel(&variableUtil,&mp);
+            switch(t){
+                case 0:{
+                    //Telemetria
+                    QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/telemetrias.csv";
+                    this->enviarDatosDelExcel(&variableUtil,&mp,t);
+                    break;
+                }
+                case 1:{
+                    //Ciclos de carga
+                    QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/ciclo_carga_descarga.csv";
+                    enviarDatosDelExcel(&variableUtil,&mp,t);
+                    break;
+                }
+                case 2:{
+                    //Gps
+                    QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/gps.csv";
+                    enviarDatosDelExcel(&variableUtil,&mp,t);
+                }
+            }
             //Luego voy a enviar el dato leído actual.
             jsonArray = variableUtil.armarQJsonArray(&datos);
-            respuesta = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+"/magnitud"));
+            respuesta = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl));
             qDebug()<<"Se guardo la entrada que llego en el momento";
             //Se ingresaron correctamente los datos.
             validacionDeId(&respuesta,&idBateria);
@@ -81,37 +101,11 @@ void hilo::procesarTramasTelemetria(){
         //solo quiero que intente enviar información si tiene internet
         if(!servidorAlive || !hayInternet){
             //Bien aca lo que yo tengo que hacer es escribir los datos en el excel.
-            mp.guardarDatoTelelmetria(&datos);
+            mp.guardarDatoTelelmetria(&datos,t);
             qDebug()<<"Se guardaron datos de telemetria en el Excel";
         }
         //Los datos son vacios.
     }else{
         qDebug()<<"Recibi dato nulos, comunicación Telemetria";
-    }
-}
-//Recibo los datos carga/descarga
-void hilo::procesarTramasCargaDescarga(){
-    // Recibo los datos.
-    QJsonObject datos = servidor2->getDatos();
-    datos["idBateria"] = idBateria;
-    QJsonArray jsonArray;
-    if(!variableUtil.determinarConexionAInternet()){
-        qDebug()<<"No hay internet para enviar los datos de carga/descarga";
-        return;
-    }
-    if(datos.isEmpty()){
-        qDebug()<<"No se recibieron datos";
-        return;
-    }
-    jsonArray.append(datos);
-    variableUtil.postHttp(jsonArray,QString(this->ulrServidor+"/cargaDescarga"));
-    qDebug()<<"Se envían los datos de carga/descarga";
-}
-void hilo::procesarTramasGps(){
-    QJsonObject datos = servidor3->getDatos();
-    datos["idBateria"] = idBateria;
-    QJsonArray jsonArray;
-    if(!variableUtil.determinarConexionAInternet()){
-        qDebug()<<"No hay internet para ";
     }
 }

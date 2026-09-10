@@ -22,7 +22,7 @@ int Manipular_Archivos::leerIdArchivo(){
     }
     return -1;
 }
-bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto){
+bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto, int t){
     //Obtengo el archivo.
     QFile archivo(pathExcelTelemetria);
     //Abro el archivo
@@ -37,7 +37,8 @@ bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto){
     QString sep = ",";
     if(archivo.size() == 0){
         //Defino el encabezado del excel
-        salida <<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
+        //salida <<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
+        escribirCabeceras(&salida,cabeceras);
     }
     //Esto lo tengo que chequear. Me tengo que fijar que esas key existan
     if(!objeto->isEmpty() && objeto->value("carga").toVariant().toString() !=""){
@@ -55,10 +56,12 @@ bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto){
     return true;
 }
 //Lee una línea del Excel y la borrar
-QJsonObject Manipular_Archivos::leerDatoTelemetria(){
+QJsonObject Manipular_Archivos::leerDatoTelemetria(int t){
     QJsonObject leeido;
+    QFile archivo;
+    QStringList cabeceras;
     //Obtengo una variable del archivo
-    QFile archivo(pathExcelTelemetria);
+
     //Abro el archivo
     if(!archivo.open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug()<<"No pude abrir el archivo excel para leer los datos de telemetria guardados";
@@ -88,7 +91,8 @@ QJsonObject Manipular_Archivos::leerDatoTelemetria(){
     }
     QString sep = ",";
     QTextStream salida(&archivo);
-    salida<<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
+    //salida<<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
+    escribirCabeceras(&salida,cabeceras);
     salida<<restoDelArchivo;
     archivo.close();
     qDebug()<<"que recupera del excel "<<leeido.value("idBateria");
@@ -102,4 +106,29 @@ void Manipular_Archivos::deStringAQJSonbject(QJsonObject* objeto,const QString l
     objeto->insert("voltaje",columnas.value(3).trimmed().toDouble());
     objeto->insert("temperatura",columnas.value(4).trimmed().toInt());
     objeto->insert("idBateria",columnas.value(5).trimmed().toInt());
+}
+void Manipular_Archivos::escribirCabeceras(QTextStream *stream,QStringList cabeceras){
+    QString sep = ",";
+    for(const QString &c:cabeceras){
+        *stream<<c<<sep;
+    }
+    *stream<<"\n";
+}
+
+void Manipular_Archivos::determinarCabeceras(QString *archivo,int t){
+    switch(t){
+    case 0:{
+        archivo.setFileName(pathExcelTelemetria);
+        cabeceras = cabecerasTelemetria;
+        break;
+    }
+    case 1: {
+        archivo.setFileName(pathExcelDescargaCarga);
+        cabeceras = cabecerasDescargaCarga;
+    }
+    case 2: {
+        archivo.setFileName(pathExcelGps);
+        cabeceras = cabecerasGps;
+    }
+    }
 }

@@ -18,15 +18,39 @@ public:
     // ----------------------------------------//
 
     //--------------- archivo excel telemetrias fallidas ------------//
-    bool guardarDatoTelelmetria(QJsonObject *obj);
-    QJsonObject leerDatoTelemetria();
+    bool guardarDatoTelelmetria(QJsonObject *obj,int t);
+    QJsonObject leerDatoTelemetria(int t);
     //---------------------------------------------------------------//
 private:
+    //------------------------------------------------- Funciones ----------------------------------------------//
     void deStringAQJSonbject(QJsonObject* objeto,const QString linea);
+    void escribirCabeceras(QTextStream*,QStringList);
+    //----------------------------------------------------------------------------------------------------------//
+    //------------------------------------------------- Variables ----------------------------------------------//
     // Variable con la ruta del archvio donde se escribe el ID de la batería del ecobus en el sistema.
    const  QString pathId = "/home/pi/App_Comunicacion_Http/archivos_configuracion/valorId.txt";
-    // Variable con la ruta del excel con las entradas.
+    // Variable con la ruta del excel con las entradas de telemetria.
    const QString pathExcelTelemetria = "/home/pi/App_Comunicacion_Http/archivos_configuracion/telemetrias.csv";
+    // Variable con la ruta del excel con las entradas de carga/descarga
+   const QString pathExcelDescargaCarga = "/home/pi/App_Comunicacion_Http/archivos_configuracion/ciclo_descarga_carga.csv";
+   // Variable con la ruta del excel con las entradas de gps
+   const QString pathExcelGps = "/home/pi/App_Comunicacion_Http/archivos_configuracion/gps.csv";
+   //Cabeceras del excell telemetria
+   const QStringList cabecerasTelemetria = {"Fecha","Carga","Corriente","Tensión","Temperatura","idBateria"};
+   //Cabeceras del excell descarga/carga
+   const QStringList cabecerasDescargaCarga = {"Fecha ingreso",
+                                               "Fecha inicio descarga",
+                                               "Fecha fin descarga",
+                                               "Descarga",
+                                               "Fecha inicio carga",
+                                               "Fecha fin carga",
+                                               "Carga",
+                                               "Diferencia descarga",
+                                               "Diferencia carga",
+                                               "idBateria"};
+   //Cabeceras del excell telemetria
+   const QStringList cabecerasGps = {"Fecha","Latitud","Longitud","Velocidad","Sentido","idBateria"};
+   //--------------------------------------------------------------------------------------------------------------//
 };
 
 #endif // MANIPUAR_ARCHIVOS_H
