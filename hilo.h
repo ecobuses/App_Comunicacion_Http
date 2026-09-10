@@ -18,6 +18,7 @@ public:
 private slots:
     void procesarTramasTelemetria();
     void procesarTramasCargaDescarga();
+    void procesarTramasGps();
 private:
     //Variables
     int idBateria;
@@ -31,6 +32,8 @@ private:
     Servidor *server{nullptr};
     //Este servidro recibe el ciclo de carga/descarga.
     Servidor *servidor2{nullptr};
+    //Este servidor recibe los datos del Gps.
+    Servidor *servidor3{nullptr};
 protected:
     void run();
 };

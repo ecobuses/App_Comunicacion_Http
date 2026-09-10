@@ -6,6 +6,7 @@ hilo::hilo() {
 void hilo::run(){
     server = new Servidor(this);
     servidor2 = new Servidor(this);
+    servidor3 = new Servidor(this);
     idBateria = mp.leerIdArchivo();
     if(!server->iniciar("telemetria")){
         qDebug()<<"No hay conexión entre aplicaciones";
@@ -15,6 +16,7 @@ void hilo::run(){
     }
     connect(server,&Servidor::datosRecibidos,this,&hilo::procesarTramasTelemetria);
     connect(servidor2, &Servidor::datosRecibidos, this, &hilo::procesarTramasCargaDescarga);
+    connect(servidor3, &Servidor::datosRecibidos, this, &hilo::procesarTramasGps);
     exec();
 }
 void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp){
@@ -104,4 +106,12 @@ void hilo::procesarTramasCargaDescarga(){
     jsonArray.append(datos);
     variableUtil.postHttp(jsonArray,QString(this->ulrServidor+"/cargaDescarga"));
     qDebug()<<"Se envían los datos de carga/descarga";
+}
+void hilo::procesarTramasGps(){
+    QJsonObject datos = servidor3->getDatos();
+    datos["idBateria"] = idBateria;
+    QJsonArray jsonArray;
+    if(!variableUtil.determinarConexionAInternet()){
+        qDebug()<<"No hay internet para ";
+    }
 }
