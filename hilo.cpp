@@ -94,7 +94,22 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
                 }
             }
             //Luego voy a enviar el dato leído actual.
-            jsonArray = variableUtil.armarQJsonArray(&datos);
+            switch(t){
+                case 0:{
+                     jsonArray = variableUtil.armarQJsonArrayTelemetria(&datos);
+                    break;
+                }
+                case 1:{
+                    jsonArray.append(datos);
+                    break;
+                }
+                case 2:{
+                    jsonArray.append(datos);
+                    break;
+                }
+
+            }
+
             respuesta = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl));
             qDebug()<<"Se guardo la entrada que llego en el momento";
             //Se ingresaron correctamente los datos.

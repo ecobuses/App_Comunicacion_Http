@@ -32,7 +32,7 @@ public:
 
     // ---------------------------------------------------------------------------------------//
     //armarJSonArray - Crea objetos QJsonObject y los mete en un QJsonArray para enviar al servidor
-     QJsonArray armarQJsonArray(QJsonObject* datos);
+     QJsonArray armarQJsonArrayTelemetria(QJsonObject* datos);
     //devuelve la fecha actual en formato Strign
      QString fechaActual();
 

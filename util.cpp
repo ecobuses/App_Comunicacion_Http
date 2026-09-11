@@ -63,7 +63,7 @@ bool util::determinarConexionAInternet() {
     return true;
 }
 //armarJSonArray - Crea objetos QJsonObject y los mete en un QJsonArray para enviar al servidor
-QJsonArray util::armarQJsonArray(QJsonObject* datos){
+QJsonArray util::armarQJsonArrayTelemetria(QJsonObject* datos){
     //Guarda el tipo del dato
     QJsonObject objTipo;
     QJsonObject objCarga;
