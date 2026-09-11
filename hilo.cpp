@@ -4,15 +4,18 @@
 hilo::hilo() {
 }
 void hilo::run(){
-    server = new Servidor(this);
-    servidor2 = new Servidor(this);
-    servidor3 = new Servidor(this);
+    server = new Servidor();
+    servidor2 = new Servidor();
+    servidor3 = new Servidor();
     idBateria = mp.leerIdArchivo();
     if(!server->iniciar("telemetria")){
-        qDebug()<<"No hay conexión entre aplicaciones";
+        qDebug()<<"No hay conexión para telemetria";
     }
     if(!servidor2->iniciar("carga_descarga")){
         qDebug()<<"No hay conexión para la carga/descarga";
+    }
+    if(!servidor3->iniciar("gps")){
+        qDebug()<<"No hay conexión para Gps";
     }
     connect(server,&Servidor::datosRecibidos,this,[=](){
         this->procesarTramas(server,"/magnitud",0);
