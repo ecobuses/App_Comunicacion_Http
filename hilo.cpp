@@ -15,7 +15,7 @@ void hilo::run(){
         qDebug()<<"No hay conexión para la carga/descarga";
     }
     connect(server,&Servidor::datosRecibidos,this,[=](){
-        this->procesarTramas(server,"/telemetria",0);
+        this->procesarTramas(server,"/magnitud",0);
     });
     connect(servidor2, &Servidor::datosRecibidos, this, [=](){
         this->procesarTramas(servidor2,"/cargaDescarga",1);
@@ -25,7 +25,7 @@ void hilo::run(){
     });
     exec();
 }
-void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp,int t){
+void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp,int t,QString url){
     QJsonObject obj;
     QJsonArray aEnviar;
     obj = mp->leerDatoExcel(t);
@@ -35,7 +35,7 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp,int t){
         qDebug()<<"Que tiene el objeto antes de enviarlo "<<obj["idBateria"];
         aEnviar = u->armarQJsonArray(&obj);
         //Qué pasa si el ID guardado por alguna razón está desactualizado?
-        respuesta = u->postHttp(aEnviar,this->ulrServidor+"/magnitud");
+        respuesta = u->postHttp(aEnviar,url);
         validacionDeId(&respuesta,&idBateria);
         obj = mp->leerDatoExcel(t);
     }
@@ -70,23 +70,24 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
             //Tengo que poder determinar si el servidor esta vivo
             qDebug()<<"Que recibio servidorAlive" << servidorAlive;
             qDebug()<<"Esta vivo";
+            QString url = this->ulrServidor+endUrl;
             switch(t){
                 case 0:{
                     //Telemetria
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/telemetrias.csv";
-                    this->enviarDatosDelExcel(&variableUtil,&mp,t);
+                    this->enviarDatosDelExcel(&variableUtil,&mp,t,url);
                     break;
                 }
                 case 1:{
                     //Ciclos de carga
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/ciclo_carga_descarga.csv";
-                    enviarDatosDelExcel(&variableUtil,&mp,t);
+                    enviarDatosDelExcel(&variableUtil,&mp,t,url);
                     break;
                 }
                 case 2:{
                     //Gps
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/gps.csv";
-                    enviarDatosDelExcel(&variableUtil,&mp,t);
+                    enviarDatosDelExcel(&variableUtil,&mp,t,url);
                 }
             }
             //Luego voy a enviar el dato leído actual.

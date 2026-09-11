@@ -14,7 +14,7 @@ public:
     void setId(int id){this->idBateria=id;}
     int getId(){return this->idBateria;}
     //Los datos de telemetria que quedaron guardados en el excel se tienen que enviar.
-    void enviarDatosDelExcel(util* u, Manipular_Archivos *mp,int t);
+    void enviarDatosDelExcel(util* u, Manipular_Archivos *mp,int t,QString url);
 private slots:
     // int t: Es una variable que sirve para ver que tipo de archivo tiene que guardar o leer.
     void procesarTramas(Servidor *, const QString endUrl,int t);
