@@ -25,10 +25,10 @@ void hilo::run(){
     });
     exec();
 }
-void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp,const QString path,QStringList cabeceras){
+void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp,int t){
     QJsonObject obj;
     QJsonArray aEnviar;
-    obj = mp->leerDatoTelemetria(path,cabeceras);
+    obj = mp->leerDatoExcel(t);
     int respuesta=0;
     while(!obj.isEmpty()){
 
@@ -37,7 +37,7 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp,const QString path
         //Qué pasa si el ID guardado por alguna razón está desactualizado?
         respuesta = u->postHttp(aEnviar,this->ulrServidor+"/magnitud");
         validacionDeId(&respuesta,&idBateria);
-        obj = mp->leerDatoTelemetria(path,cabeceras);
+        obj = mp->leerDatoExcel(t);
     }
 }
 void hilo::validacionDeId(int* respuesta, int* idBateria){
@@ -101,7 +101,7 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
         //solo quiero que intente enviar información si tiene internet
         if(!servidorAlive || !hayInternet){
             //Bien aca lo que yo tengo que hacer es escribir los datos en el excel.
-            mp.guardarDatoTelelmetria(&datos,t);
+            mp.guardarDatoExcel(&datos,t);
             qDebug()<<"Se guardaron datos de telemetria en el Excel";
         }
         //Los datos son vacios.

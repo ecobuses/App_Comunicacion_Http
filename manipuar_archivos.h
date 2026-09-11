@@ -18,13 +18,15 @@ public:
     // ----------------------------------------//
 
     //--------------- archivo excel telemetrias fallidas ------------//
-    bool guardarDatoTelelmetria(QJsonObject *obj,int t);
-    QJsonObject leerDatoTelemetria(int t);
+    bool guardarDatoExcel(QJsonObject *obj,int t);
+    QJsonObject leerDatoExcel(int t);
+    void determinarCabeceras(QFile*archivo,QStringList *cabeceras,int t);
     //---------------------------------------------------------------//
 private:
     //------------------------------------------------- Funciones ----------------------------------------------//
-    void deStringAQJSonbject(QJsonObject* objeto,const QString linea);
+    void deStringAQJSonbject(QJsonObject* objeto,const QString linea,int t);
     void escribirCabeceras(QTextStream*,QStringList);
+    void escribirExcel(QTextStream *, QJsonObject *objeto ,int t);
     //----------------------------------------------------------------------------------------------------------//
     //------------------------------------------------- Variables ----------------------------------------------//
     // Variable con la ruta del archvio donde se escribe el ID de la batería del ecobus en el sistema.
@@ -48,8 +50,10 @@ private:
                                                "Diferencia descarga",
                                                "Diferencia carga",
                                                "idBateria"};
-   //Cabeceras del excell telemetria
+   //Cabeceras del excell Gps
    const QStringList cabecerasGps = {"Fecha","Latitud","Longitud","Velocidad","Sentido","idBateria"};
+   //Claves del objeto telemetria -> Implementación futura
+   const QStringList clavesTelemetria = {"fecha","carga","corriente","voltaje","voltaje","temperatura","idBateria"};
    //--------------------------------------------------------------------------------------------------------------//
 };
 

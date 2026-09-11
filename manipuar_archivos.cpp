@@ -22,9 +22,10 @@ int Manipular_Archivos::leerIdArchivo(){
     }
     return -1;
 }
-bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto, int t){
+bool Manipular_Archivos::guardarDatoExcel(QJsonObject* objeto, int t){
     //Obtengo el archivo.
     QFile archivo(pathExcelTelemetria);
+    QStringList cabeceras;
     //Abro el archivo
     if(!archivo.open(QIODevice::WriteOnly | QIODevice::Append)) {
         // Si no puedo abrirlo, no puedo escribir.
@@ -32,6 +33,7 @@ bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto, int t){
         return false;
     }
     // Me sirve para escribir y leer en el archivo de manera más fácil.
+    determinarCabeceras(&archivo,&cabeceras,t);
     QTextStream salida(&archivo);
     // Me sirve para separa los campos.
     QString sep = ",";
@@ -40,23 +42,13 @@ bool Manipular_Archivos::guardarDatoTelelmetria(QJsonObject* objeto, int t){
         //salida <<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
         escribirCabeceras(&salida,cabeceras);
     }
-    //Esto lo tengo que chequear. Me tengo que fijar que esas key existan
-    if(!objeto->isEmpty() && objeto->value("carga").toVariant().toString() !=""){
-        salida<<objeto->value("fecha").toVariant().toString()<<sep;
-        qDebug()<<"Que se guarda en el Excel"<<objeto->value("carga").toVariant().toString();
-        salida<<objeto->value("carga").toVariant().toString()<<sep;
-        salida<<objeto->value("corriente").toVariant().toString()<<sep;
-        salida<<objeto->value("voltaje").toVariant().toString()<<sep;
-        salida<<objeto->value("temperatura").toVariant().toString()<<sep;
-        salida<<objeto->value("idBateria").toVariant().toString()<<"\n";
-    }
-
+    escribirExcel(&salida,objeto,t);
     //Cierro el archivo
     archivo.close();
     return true;
 }
 //Lee una línea del Excel y la borrar
-QJsonObject Manipular_Archivos::leerDatoTelemetria(int t){
+QJsonObject Manipular_Archivos::leerDatoExcel(int t){
     QJsonObject leeido;
     QFile archivo;
     QStringList cabeceras;
@@ -81,7 +73,7 @@ QJsonObject Manipular_Archivos::leerDatoTelemetria(int t){
         return leeido;
     }
     //Convierte la primera linea de datos en un QJsonObject
-    this->deStringAQJSonbject(&leeido,primeraLinea);
+    this->deStringAQJSonbject(&leeido,primeraLinea,t);
     //Piso el contenido del archivo sin la primera linea
     QString restoDelArchivo = entrada.readAll();
     archivo.close();
@@ -91,6 +83,7 @@ QJsonObject Manipular_Archivos::leerDatoTelemetria(int t){
     }
     QString sep = ",";
     QTextStream salida(&archivo);
+    determinarCabeceras(&archivo,&cabeceras,t);
     //salida<<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
     escribirCabeceras(&salida,cabeceras);
     salida<<restoDelArchivo;
@@ -98,14 +91,43 @@ QJsonObject Manipular_Archivos::leerDatoTelemetria(int t){
     qDebug()<<"que recupera del excel "<<leeido.value("idBateria");
     return leeido;
 }
-void Manipular_Archivos::deStringAQJSonbject(QJsonObject* objeto,const QString linea){
-    QStringList columnas = linea.split(",");
-    objeto->insert("fecha",columnas.value(0).trimmed());
-    objeto->insert("carga",columnas.value(1).trimmed().toDouble());
-    objeto->insert("corriente",columnas.value(2).trimmed().toDouble());
-    objeto->insert("voltaje",columnas.value(3).trimmed().toDouble());
-    objeto->insert("temperatura",columnas.value(4).trimmed().toInt());
-    objeto->insert("idBateria",columnas.value(5).trimmed().toInt());
+void Manipular_Archivos::deStringAQJSonbject(QJsonObject* objeto,const QString linea, int t){
+    switch(t){
+        case 0: {
+            QStringList columnas = linea.split(",");
+            objeto->insert("fecha",columnas.value(0).trimmed());
+            objeto->insert("carga",columnas.value(1).trimmed().toDouble());
+            objeto->insert("corriente",columnas.value(2).trimmed().toDouble());
+            objeto->insert("voltaje",columnas.value(3).trimmed().toDouble());
+            objeto->insert("temperatura",columnas.value(4).trimmed().toInt());
+            objeto->insert("idBateria",columnas.value(5).trimmed().toInt());
+            break;
+        }
+        case 1: {
+            QStringList columnas = linea.split(",");
+            objeto->insert("fechaEntrada",columnas.value(0).trimmed());
+            objeto->insert("inicioDescarga",columnas.value(1).trimmed());
+            objeto->insert("finDescarga",columnas.value(2).trimmed());
+            objeto->insert("descarga",columnas.value(3).trimmed().toDouble());
+            objeto->insert("inicioCarga",columnas.value(4).trimmed());
+            objeto->insert("finCarga",columnas.value(5).trimmed());
+            objeto->insert("carga",columnas.value(6).trimmed().toDouble());
+            objeto->insert("diferenciaDescarga",columnas.value(7).trimmed().toDouble());
+            objeto->insert("difernciaCarga",columnas.value(8).trimmed().toDouble());
+            objeto->insert("idBateria",columnas.value(9).trimmed().toInt());
+            break;
+        }
+        case 2:{
+            QStringList columnas = linea.split(",");
+            objeto->insert("fecha",columnas.value(0).trimmed());
+            objeto->insert("latitud",columnas.value(1).trimmed().toDouble());
+            objeto->insert("longitud",columnas.value(2).trimmed().toDouble());
+            objeto->insert("velocidad",columnas.value(3).trimmed().toDouble());
+            objeto->insert("sentido",columnas.value(4).trimmed().toDouble());
+            objeto->insert("idBateria",columnas.value(5).trimmed().toInt());
+            break;
+        }
+    }
 }
 void Manipular_Archivos::escribirCabeceras(QTextStream *stream,QStringList cabeceras){
     QString sep = ",";
@@ -115,20 +137,64 @@ void Manipular_Archivos::escribirCabeceras(QTextStream *stream,QStringList cabec
     *stream<<"\n";
 }
 
-void Manipular_Archivos::determinarCabeceras(QString *archivo,int t){
+void Manipular_Archivos::determinarCabeceras(QFile*archivo,QStringList *cabeceras,int t){
     switch(t){
     case 0:{
-        archivo.setFileName(pathExcelTelemetria);
-        cabeceras = cabecerasTelemetria;
+        archivo->setFileName(pathExcelTelemetria);
+        *cabeceras = cabecerasTelemetria;
         break;
     }
     case 1: {
-        archivo.setFileName(pathExcelDescargaCarga);
-        cabeceras = cabecerasDescargaCarga;
+        archivo->setFileName(pathExcelDescargaCarga);
+        *cabeceras = cabecerasDescargaCarga;
     }
     case 2: {
-        archivo.setFileName(pathExcelGps);
-        cabeceras = cabecerasGps;
+        archivo->setFileName(pathExcelGps);
+        *cabeceras = cabecerasGps;
     }
+    }
+}
+void Manipular_Archivos::escribirExcel(QTextStream *salida,QJsonObject *objeto, int t){
+    //Esto lo tengo que chequear. Me tengo que fijar que esas key existan
+    QString sep=",";
+    switch(t){
+        case 0:{
+            if(!objeto->isEmpty() && objeto->value("carga").toVariant().toString() !=""){
+                *salida<<objeto->value("fecha").toVariant().toString()<<sep;
+                qDebug()<<"Que se guarda en el Excel"<<objeto->value("carga").toVariant().toString();
+                *salida<<objeto->value("carga").toVariant().toString()<<sep;
+                *salida<<objeto->value("corriente").toVariant().toString()<<sep;
+                *salida<<objeto->value("voltaje").toVariant().toString()<<sep;
+                *salida<<objeto->value("temperatura").toVariant().toString()<<sep;
+                *salida<<objeto->value("idBateria").toVariant().toString()<<"\n";
+            }
+            break;
+        }
+        case 1:{
+            if(!objeto->isEmpty() && objeto->value("latitud").toVariant().toString() !=""){
+                *salida<<objeto->value("fechaEntrada").toVariant().toString()<<sep;
+                *salida<<objeto->value("inicioDescarga").toVariant().toString()<<sep;
+                *salida<<objeto->value("finDescarga").toVariant().toString()<<sep;
+                *salida<<objeto->value("descarga").toVariant().toString()<<sep;
+                *salida<<objeto->value("inicioCarga").toVariant().toString()<<sep;
+                *salida<<objeto->value("finCarga").toVariant().toString()<<sep;
+                *salida<<objeto->value("carga").toVariant().toString()<<sep;
+                *salida<<objeto->value("diferenciaDescarga").toVariant().toString()<<sep;
+                *salida<<objeto->value("diferenciaCarga").toVariant().toString()<<sep;
+                *salida<<objeto->value("idBateria").toVariant().toString()<<"\n";
+            }
+            break;
+        }
+        case 2:{
+            if(!objeto->isEmpty() && objeto->value("latitud").toVariant().toString() !=""){
+                *salida<<objeto->value("fecha").toVariant().toString()<<sep;
+                *salida<<objeto->value("latitud").toVariant().toString()<<sep;
+                *salida<<objeto->value("longitud").toVariant().toString()<<sep;
+                *salida<<objeto->value("velocidad").toVariant().toString()<<sep;
+                *salida<<objeto->value("sentido").toVariant().toString()<<sep;
+                *salida<<objeto->value("idBateria").toVariant().toString()<<"\n";
+            }
+            break;
+        }
     }
 }
