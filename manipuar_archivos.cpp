@@ -23,8 +23,10 @@ int Manipular_Archivos::leerIdArchivo(){
     return -1;
 }
 bool Manipular_Archivos::guardarDatoExcel(QJsonObject* objeto, int t){
+    QString path;
+    determinarPath(t,&path);
     //Obtengo el archivo.
-    QFile archivo(pathExcelTelemetria);
+    QFile archivo(path);
     QStringList cabeceras;
     //Abro el archivo
     if(!archivo.open(QIODevice::WriteOnly | QIODevice::Append)) {
@@ -50,7 +52,9 @@ bool Manipular_Archivos::guardarDatoExcel(QJsonObject* objeto, int t){
 //Lee una línea del Excel y la borrar
 QJsonObject Manipular_Archivos::leerDatoExcel(int t){
     QJsonObject leeido;
-    QFile archivo;
+    QString path;
+    determinarPath(t,&path);
+    QFile archivo(path);
     QStringList cabeceras;
     //Obtengo una variable del archivo
 
@@ -78,7 +82,7 @@ QJsonObject Manipular_Archivos::leerDatoExcel(int t){
     QString restoDelArchivo = entrada.readAll();
     archivo.close();
     if(!archivo.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)){
-        qDebug()<<"No pude abrir el archivo excel para re-escribir los datos de telemetria guardados";
+        qDebug()<<"No pude abrir el archivo excel para re-escribir los datos guardados";
         return leeido;
     }
     QString sep = ",";
@@ -196,5 +200,21 @@ void Manipular_Archivos::escribirExcel(QTextStream *salida,QJsonObject *objeto, 
             }
             break;
         }
+    }
+}
+void Manipular_Archivos::determinarPath(int t, QString *path){
+    switch(t){
+    case 0:{
+        *path =pathExcelTelemetria;
+        break;
+    }
+    case 1:{
+       *path=pathExcelDescargaCarga;
+        break;
+    }
+    case 2:{
+        *path=pathExcelGps;
+        break;
+    }
     }
 }

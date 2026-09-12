@@ -21,6 +21,7 @@ public:
     bool guardarDatoExcel(QJsonObject *obj,int t);
     QJsonObject leerDatoExcel(int t);
     void determinarCabeceras(QFile*archivo,QStringList *cabeceras,int t);
+    void determinarPath(int, QString*);
     //---------------------------------------------------------------//
 private:
     //------------------------------------------------- Funciones ----------------------------------------------//
