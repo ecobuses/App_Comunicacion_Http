@@ -36,9 +36,22 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp,int t,QString url)
     while(!obj.isEmpty()){
 
         qDebug()<<"Que tiene el objeto antes de enviarlo "<<obj["idBateria"];
-        aEnviar = u->armarQJsonArray(&obj);
+        switch(t){
+        case 0:{
+            aEnviar=u->armarQJsonArrayTelemetria(&obj);
+            break;
+        }
+        case 1:{
+            aEnviar.append(obj);
+            break;
+        }
+        case 2:{
+            aEnviar.append(obj);
+            break;
+        }
+        }
         //Qué pasa si el ID guardado por alguna razón está desactualizado?
-        respuesta = u->postHttp(aEnviar,url);
+        respuesta = u->postHttp(aEnviar,url,t);
         validacionDeId(&respuesta,&idBateria);
         obj = mp->leerDatoExcel(t);
     }
@@ -68,7 +81,7 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
         bool hayInternet = variableUtil.determinarConexionAInternet();
         //Determino si tengo conexión a internet.
         //Envío datos del Excel si hay
-        servidorAlive = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+"/util/isAlive")) == 1? true:false;
+        servidorAlive = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+"/util/isAlive"),t) == 1? true:false;
         if(hayInternet && servidorAlive){
             //Tengo que poder determinar si el servidor esta vivo
             qDebug()<<"Que recibio servidorAlive" << servidorAlive;
@@ -79,46 +92,33 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
                     //Telemetria
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/telemetrias.csv";
                     this->enviarDatosDelExcel(&variableUtil,&mp,t,url);
+                    jsonArray = variableUtil.armarQJsonArrayTelemetria(&datos);
+                    validacionDeId(&respuesta,&idBateria);
                     break;
                 }
                 case 1:{
                     //Ciclos de carga
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/ciclo_carga_descarga.csv";
                     enviarDatosDelExcel(&variableUtil,&mp,t,url);
+                    jsonArray.append(datos);
                     break;
                 }
                 case 2:{
                     //Gps
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/gps.csv";
                     enviarDatosDelExcel(&variableUtil,&mp,t,url);
+                    jsonArray.append(datos);
                 }
             }
-            //Luego voy a enviar el dato leído actual.
-            switch(t){
-                case 0:{
-                     jsonArray = variableUtil.armarQJsonArrayTelemetria(&datos);
-                    break;
-                }
-                case 1:{
-                    jsonArray.append(datos);
-                    break;
-                }
-                case 2:{
-                    jsonArray.append(datos);
-                    break;
-                }
-
-            }
-
-            respuesta = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl));
+            //Luego voy a enviar el dato leído actual
+            respuesta = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl),t);
             qDebug()<<"Se guardo la entrada que llego en el momento";
             //Se ingresaron correctamente los datos.
-            validacionDeId(&respuesta,&idBateria);
         }
         //Surgio un error al enviar la petición HTTP, es decir no se enviaron los datos al servidor.
         //En este caso también tendría que guardar los datos, y luego intentar volver a enviarlos.
         //solo quiero que intente enviar información si tiene internet
-        if(!servidorAlive || !hayInternet){
+        if(!servidorAlive || !hayInternet ){
             //Bien aca lo que yo tengo que hacer es escribir los datos en el excel.
             mp.guardarDatoExcel(&datos,t);
             qDebug()<<"Se guardaron datos de telemetria en el Excel";

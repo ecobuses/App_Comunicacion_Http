@@ -3,7 +3,7 @@
 util::util() {
 
 }
-int util::postHttp(QJsonArray &json,QString url){
+int util::postHttp(QJsonArray &json,QString url,int t){
 
 
     // create custom temporary event loop on stack
@@ -16,8 +16,22 @@ int util::postHttp(QJsonArray &json,QString url){
     // the HTTP request
     QUrl urlq(url);
     QNetworkRequest req(urlq);
-    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    QNetworkReply *reply = mgr.post(req,QJsonDocument(json).toJson());
+    QNetworkReply *reply;
+    switch(t){
+    case 0:{
+            req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+            reply = mgr.post(req,QJsonDocument(json).toJson());
+            break;
+        }
+    default:{
+            QJsonObject obj = json.at(0).toObject();
+            qDebug()<<"Que tiene gps"<<obj["latitud"];
+            req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+            reply = mgr.post(req,QJsonDocument(obj).toJson());
+            break;
+        }
+    }
+
     QTimer *timer = new QTimer();
     timer->setSingleShot(true);
     QObject::connect(timer, &QTimer::timeout, reply, [reply]() {

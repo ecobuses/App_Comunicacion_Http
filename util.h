@@ -22,7 +22,7 @@ public:
     util();
     //Envía un petición POST con los datos de telemetria.
     //También devuelve el ID de la batería a la que corresponden esos datos.
-    int  postHttp(QJsonArray &,QString );
+    int  postHttp(QJsonArray &,QString,int t );
     // ------------------- Guardar datos de telemetría que no se pueden enviar --------------- //
         // Chequear si hay internet.
      bool determinarConexionAInternet();
