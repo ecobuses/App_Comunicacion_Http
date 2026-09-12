@@ -35,7 +35,7 @@ bool Manipular_Archivos::guardarDatoExcel(QJsonObject* objeto, int t){
         return false;
     }
     // Me sirve para escribir y leer en el archivo de manera más fácil.
-    determinarCabeceras(&archivo,&cabeceras,t);
+    determinarCabeceras(&cabeceras,t);
     QTextStream salida(&archivo);
     // Me sirve para separa los campos.
     QString sep = ",";
@@ -87,7 +87,7 @@ QJsonObject Manipular_Archivos::leerDatoExcel(int t){
     }
     QString sep = ",";
     QTextStream salida(&archivo);
-    determinarCabeceras(&archivo,&cabeceras,t);
+    determinarCabeceras(&cabeceras,t);
     //salida<<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
     escribirCabeceras(&salida,cabeceras);
     salida<<restoDelArchivo;
@@ -141,19 +141,16 @@ void Manipular_Archivos::escribirCabeceras(QTextStream *stream,QStringList cabec
     *stream<<"\n";
 }
 
-void Manipular_Archivos::determinarCabeceras(QFile*archivo,QStringList *cabeceras,int t){
+void Manipular_Archivos::determinarCabeceras(QStringList *cabeceras,int t){
     switch(t){
     case 0:{
-        archivo->setFileName(pathExcelTelemetria);
         *cabeceras = cabecerasTelemetria;
         break;
     }
     case 1: {
-        archivo->setFileName(pathExcelDescargaCarga);
         *cabeceras = cabecerasDescargaCarga;
     }
     case 2: {
-        archivo->setFileName(pathExcelGps);
         *cabeceras = cabecerasGps;
     }
     }

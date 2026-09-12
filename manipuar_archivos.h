@@ -20,7 +20,7 @@ public:
     //--------------- archivo excel telemetrias fallidas ------------//
     bool guardarDatoExcel(QJsonObject *obj,int t);
     QJsonObject leerDatoExcel(int t);
-    void determinarCabeceras(QFile*archivo,QStringList *cabeceras,int t);
+    void determinarCabeceras(QStringList *cabeceras,int t);
     void determinarPath(int, QString*);
     //---------------------------------------------------------------//
 private:
