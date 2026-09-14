@@ -172,7 +172,7 @@ void Manipular_Archivos::escribirExcel(QTextStream *salida,QJsonObject *objeto, 
             break;
         }
         case 1:{
-            if(!objeto->isEmpty() && objeto->value("latitud").toVariant().toString() !=""){
+            if(!objeto->isEmpty() && objeto->value("descarga").toVariant().toString() !=""){
                 *salida<<objeto->value("fechaEntrada").toVariant().toString()<<sep;
                 *salida<<objeto->value("inicioDescarga").toVariant().toString()<<sep;
                 *salida<<objeto->value("finDescarga").toVariant().toString()<<sep;

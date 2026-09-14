@@ -72,6 +72,7 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
     QJsonObject datos = servidor->getDatos();
     //Guarda todos los valores
     datos["idBateria"] = idBateria;
+    datos["fecha"] = variableUtil.fechaActual();
     //No quiero que me mande datos vacios.
     if(!datos.isEmpty()
         ){
@@ -89,7 +90,6 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
             switch(t){
                 case 0:{
                     //Telemetria
-                    datos["fecha"] = variableUtil.fechaActual();
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/telemetrias.csv";
                     this->enviarDatosDelExcel(&variableUtil,&mp,t,url);
                     jsonArray = variableUtil.armarQJsonArrayTelemetria(&datos);
@@ -105,7 +105,6 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
                 }
                 case 2:{
                     //Gps
-                    datos["fecha"] = variableUtil.fechaActual();
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/gps.csv";
                     enviarDatosDelExcel(&variableUtil,&mp,t,url);
                     jsonArray.append(datos);
