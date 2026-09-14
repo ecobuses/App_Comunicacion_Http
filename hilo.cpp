@@ -101,6 +101,7 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/ciclo_carga_descarga.csv";
                     enviarDatosDelExcel(&variableUtil,&mp,t,url);
                     jsonArray.append(datos);
+                    variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl),t);
                     break;
                 }
                 case 2:{
@@ -108,17 +109,19 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/gps.csv";
                     enviarDatosDelExcel(&variableUtil,&mp,t,url);
                     jsonArray.append(datos);
+                    variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl),t);
                 }
             }
             //Luego voy a enviar el dato leído actual
-            respuesta = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl),t);
+            //Solo me importa la respuesta de la petición de telemetria, las otras deben carga los datos al mismo vehículo.
+            //Si no hago esto podría ingresar distintos vehículos y generar inconsistencias.
             qDebug()<<"Se guardo la entrada que llego en el momento";
             //Se ingresaron correctamente los datos.
         }
         //Surgio un error al enviar la petición HTTP, es decir no se enviaron los datos al servidor.
         //En este caso también tendría que guardar los datos, y luego intentar volver a enviarlos.
         //solo quiero que intente enviar información si tiene internet
-        if(!servidorAlive || !hayInternet ){
+        if((!servidorAlive || !hayInternet) && idBateria >0){
             //Bien aca lo que yo tengo que hacer es escribir los datos en el excel.
             mp.guardarDatoExcel(&datos,t);
             qDebug()<<"Se guardaron datos de telemetria en el Excel";
