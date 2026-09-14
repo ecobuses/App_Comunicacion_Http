@@ -51,7 +51,12 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp,int t,QString url)
         }
         }
         //Qué pasa si el ID guardado por alguna razón está desactualizado?
-        respuesta = u->postHttp(aEnviar,url,t);
+        if(t==0){
+            respuesta = u->postHttp(aEnviar,url,t);
+        }else{
+            u->postHttp(aEnviar,url,t);
+        }
+
         validacionDeId(&respuesta,&idBateria);
         obj = mp->leerDatoExcel(t);
     }
