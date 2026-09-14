@@ -51,7 +51,12 @@ void hilo::enviarDatosDelExcel(util* u,Manipular_Archivos* mp,int t,QString url)
         }
         }
         //Qué pasa si el ID guardado por alguna razón está desactualizado?
-        respuesta = u->postHttp(aEnviar,url,t);
+        if(t==0){
+            respuesta = u->postHttp(aEnviar,url,t);
+        }else{
+            u->postHttp(aEnviar,url,t);
+        }
+
         validacionDeId(&respuesta,&idBateria);
         obj = mp->leerDatoExcel(t);
     }
@@ -93,6 +98,7 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/telemetrias.csv";
                     this->enviarDatosDelExcel(&variableUtil,&mp,t,url);
                     jsonArray = variableUtil.armarQJsonArrayTelemetria(&datos);
+                    respuesta = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl),t);
                     validacionDeId(&respuesta,&idBateria);
                     break;
                 }
