@@ -93,6 +93,7 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/telemetrias.csv";
                     this->enviarDatosDelExcel(&variableUtil,&mp,t,url);
                     jsonArray = variableUtil.armarQJsonArrayTelemetria(&datos);
+                    respuesta = variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl),t);
                     validacionDeId(&respuesta,&idBateria);
                     break;
                 }
