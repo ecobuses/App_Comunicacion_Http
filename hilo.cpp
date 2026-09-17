@@ -116,6 +116,7 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
                     enviarDatosDelExcel(&variableUtil,&mp,t,url);
                     jsonArray.append(datos);
                     variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl),t);
+                    break;
                 }
             }
             //Luego voy a enviar el dato leído actual
