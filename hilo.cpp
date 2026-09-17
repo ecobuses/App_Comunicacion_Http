@@ -66,7 +66,7 @@ void hilo::validacionDeId(int* respuesta, int* idBateria){
         *idBateria = *respuesta;
         mp.guardarIdArchivo(*idBateria);
         //No se encontro la batería a la que pertenecen esos datos
-    }else if(*respuesta == 0){
+    }else if(*respuesta == -2){
         *idBateria = -1;
     }
 }

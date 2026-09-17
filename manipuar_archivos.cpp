@@ -149,9 +149,11 @@ void Manipular_Archivos::determinarCabeceras(QStringList *cabeceras,int t){
     }
     case 1: {
         *cabeceras = cabecerasDescargaCarga;
+        break;
     }
     case 2: {
         *cabeceras = cabecerasGps;
+        break;
     }
     }
 }
