@@ -41,15 +41,15 @@ private:
    //Cabeceras del excell telemetria
    const QStringList cabecerasTelemetria = {"Fecha","Carga","Corriente","Tensión","Temperatura","idBateria"};
    //Cabeceras del excell descarga/carga
-   const QStringList cabecerasDescargaCarga = {"Fecha ingreso",
-                                               "Fecha inicio descarga",
-                                               "Fecha fin descarga",
+   const QStringList cabecerasDescargaCarga = {"Fecha_ingreso",
+                                               "Fecha_inicio_descarga",
+                                               "Fecha_fin_descarga",
                                                "Descarga",
-                                               "Fecha inicio carga",
-                                               "Fecha fin carga",
+                                               "Fecha_inicio_carga",
+                                               "Fecha_fin_carga",
                                                "Carga",
-                                               "Diferencia descarga",
-                                               "Diferencia carga",
+                                               "Diferencia_descarga",
+                                               "Diferencia_carga",
                                                "idBateria"};
    //Cabeceras del excell Gps
    const QStringList cabecerasGps = {"Fecha","Latitud","Longitud","Velocidad","Sentido","idBateria"};
