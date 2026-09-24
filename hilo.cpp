@@ -106,6 +106,7 @@ void hilo::procesarTramas(Servidor *servidor,const QString endUrl, int t){
                     //Ciclos de carga
                     QString path = "/home/pi/App_Comunicacion_Http/archivos_configuracion/ciclo_carga_descarga.csv";
                     enviarDatosDelExcel(&variableUtil,&mp,t,url);
+                    datos["fechaEntrada"] = variableUtil.fechaActual();
                     jsonArray.append(datos);
                     variableUtil.postHttp(jsonArray,QString(this->ulrServidor+endUrl),t);
                     break;
