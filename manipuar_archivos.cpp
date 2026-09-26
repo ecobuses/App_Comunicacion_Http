@@ -40,8 +40,6 @@ bool Manipular_Archivos::guardarDatoExcel(QJsonObject* objeto, int t){
     // Me sirve para separa los campos.
     QString sep = ",";
     if(archivo.size() == 0){
-        //Defino el encabezado del excel
-        //salida <<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
         escribirCabeceras(&salida,cabeceras);
     }
     escribirExcel(&salida,objeto,t);
@@ -88,7 +86,6 @@ QJsonObject Manipular_Archivos::leerDatoExcel(int t){
     QString sep = ",";
     QTextStream salida(&archivo);
     determinarCabeceras(&cabeceras,t);
-    //salida<<"Fecha"<<sep<<"Carga"<<sep<<"Corriente"<<sep<<"Tensión"<<sep<<"Temperatura"<<sep<<"idBateria" <<"\n";
     escribirCabeceras(&salida,cabeceras);
     salida<<restoDelArchivo;
     archivo.close();
@@ -134,11 +131,7 @@ void Manipular_Archivos::deStringAQJSonbject(QJsonObject* objeto,const QString l
     }
 }
 void Manipular_Archivos::escribirCabeceras(QTextStream *stream,QStringList cabeceras){
-    QString sep = ",";
-    for(const QString &c:cabeceras){
-        *stream<<c<<sep;
-    }
-    *stream<<"\n";
+    *stream<<cabeceras.join(",")<<"\n";
 }
 
 void Manipular_Archivos::determinarCabeceras(QStringList *cabeceras,int t){
@@ -175,7 +168,7 @@ void Manipular_Archivos::escribirExcel(QTextStream *salida,QJsonObject *objeto, 
         }
         case 1:{
             if(!objeto->isEmpty() && objeto->value("descarga").toVariant().toString() !=""){
-                *salida<<objeto->value("fechaEntrada").toVariant().toString()<<sep;
+                *salida<<objeto->value("fecha").toVariant().toString()<<sep;
                 *salida<<objeto->value("inicioDescarga").toVariant().toString()<<sep;
                 *salida<<objeto->value("finDescarga").toVariant().toString()<<sep;
                 *salida<<objeto->value("descarga").toVariant().toString()<<sep;
